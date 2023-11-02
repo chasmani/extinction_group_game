@@ -6,6 +6,10 @@ SESSION_CONFIGS = [
         app_sequence=['game'],
         num_demo_participants=5,
     ),
+    dict(
+    	name="consent",
+    	app_sequence=['consent'],
+    	num_demo_participants=4)
 ]
 
 # if you set a property in SESSION_CONFIG_DEFAULTS, it will be inherited by all configs

@@ -1,0 +1,21 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{{ block title }}
+  Consent
+{{ endblock }}
+{{ block content }}
+
+<p>DOCTOR HENRIK SINGMANN- PROJECT DIRECTOR<br>
+h.singmann@ucl.ac.uk</p>
+<p>INFORMED CONSENT FOR PARTICIPANTS<br>
+Project: Optimal Stopping</p>
+<p>This study has been approved by the Ethics Committee of the UCL Department of Experimental Psychology: ID No: EP/2021/005</p>
+
+<p>By checking the boxes below, I confirm that:</p>
+
+  {{ formfields }}
+
+{{ next_button }}
+
+{{ endblock }}
