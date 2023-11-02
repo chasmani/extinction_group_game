@@ -1,0 +1,48 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+{% load static %}
+
+{{ block title }}  
+    Task Instructions
+{{ endblock }}
+{{ block content }}
+
+<p style="color:red;"> <b> Please read the below instructions carefully as there will be a comprehension check after the practice trials. </b> </p>
+
+<p> In this experiment, you can get a bonus payment on top of your regular payment. This bonus will depend on your answers to a series of gambles. There will be 100 trials in total. In each trial, you will need to decide between a "safe" and a "risky" lottery. Each lottery has different reward outcomes with different probabilities of each outcome occurring. </p>
+<p> Safe Lottery: </p>
+<ul>
+   <li>50% chance of winning 1p </li>
+   <li>50% chance of winning 0p </li>
+</ul>
+<p> Risky Lottery:</p>
+<ul>
+   <li> 47.5% chance of winning 10p </li>
+   <li> 47.5% chance of winning 0p </li>
+   <li> 5% chance of <b> extinction </b> </li>
+</ul>
+<p> If you draw the <b> extinction </b> outcome, your bonus payment for the whole experiment will be wiped out, and you cannot get any more bonus payments for future trials. In other words, even if you draw the extinction outcome only once during the study,<b> you will receive no bonus payment at all at the end of the study </b>. However,<b> you will still need to finish the rest of the trials </b> (so choosing the extinction option will not save you any time). </p>
+
+<p> During the experiment, you will always see your <b> current bonus</b> on the top right. The current trial number is on the top left, and the two lotteries are in the middle.  </p>
+
+<p> See below a picture of the display. </p>
+
+
+<div class = "inner">
+
+<img src="{{ static 'resources/instructions.png' }}" alt = "InstructionsPic" style="width:1200px;height:700px;" class  = "center"> 
+</div>
+
+<p><center> If you understand these instructions, please click <kbd>Next</kbd> to start the practice trials. </center></p>
+
+
+      {{ next_button }}
+
+
+
+
+
+  
+
+
+{{ endblock }}

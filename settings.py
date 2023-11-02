@@ -9,7 +9,18 @@ SESSION_CONFIGS = [
     dict(
     	name="consent",
     	app_sequence=['consent'],
-    	num_demo_participants=4)
+    	num_demo_participants=4,
+    ),
+    dict(
+    	name="instructions",
+    	app_sequence=["instructions"],
+    	num_demo_participants=4,
+    ),
+    dict(
+    	name="practice",
+    	app_sequence=["practice"],
+    	num_demo_participants=4,
+    )
 ]
 
 # if you set a property in SESSION_CONFIG_DEFAULTS, it will be inherited by all configs
@@ -20,8 +31,13 @@ SESSION_CONFIGS = [
 SESSION_CONFIG_DEFAULTS = dict(
     real_world_currency_per_point=1.00, participation_fee=0.00, doc=""
 )
+PARTICIPANT_FIELDS = [
+    "practice_payoff", 
+    "practice_extinct",
+    "game_payoff",
+    "game_extinct"
+    ]
 
-PARTICIPANT_FIELDS = []
 SESSION_FIELDS = []
 
 # ISO-639 code

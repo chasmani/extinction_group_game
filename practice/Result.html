@@ -1,0 +1,32 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+{% load static %}
+
+{{ block title }}  
+	Result
+{{ endblock }}
+{{ block content }}
+
+
+{{ result }}
+
+
+{% if result == "extinction" %}
+
+{% elif result == "safe_win" %}
+
+{% elif result == "risky_win" %}
+
+{% elif result == "extinction" %}
+
+{% endif %}
+
+
+
+<div class="mt-4">
+      {{ next_button }}
+</div>  
+
+
+
+{{ endblock }}
