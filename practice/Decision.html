@@ -16,7 +16,7 @@
         <div class="col-md-6">
             {% if player.round_number > 1 %}
             <div id="result">
-            <h4>Last Trial Result</h4>
+            
                 {% if player.participant.last_result == '0' %}
                 <div class="alert alert-secondary" role="alert">
                     0
@@ -37,12 +37,13 @@
                 </div>
                 {% endif %}
             </div>
-            {% endif %}
-            {% if player.participant.extinct %}
-                <div class="alert alert-danger" role="alert">
-                    <p><strong>You are extinct!</strong> You will still need to continue playing the remaining trials.
-                    However, you will not earn the bonus.</p>
-                </div>
+            
+                {% if player.participant.extinct %}
+                    <div class="alert alert-danger" role="alert">
+                        <p><strong>You are extinct!</strong> You will still need to continue playing the remaining trials.
+                        However, you will not earn the bonus.</p>
+                    </div>
+                {% endif %}
             {% endif %}
         </div>
         <div class="col-md-3 bonus">

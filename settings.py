@@ -17,25 +17,10 @@ SESSION_CONFIGS = [
         num_demo_participants=5,
     ),
     dict(
-        name='game',
-        app_sequence=['game'],
+        name='full_experiment',
+        app_sequence=['consent', 'instructions', 'practice'],
         num_demo_participants=5,
     ),
-    dict(
-    	name="consent",
-    	app_sequence=['consent'],
-    	num_demo_participants=4,
-    ),
-    dict(
-    	name="instructions",
-    	app_sequence=["instructions"],
-    	num_demo_participants=4,
-    ),
-    dict(
-    	name="practice",
-    	app_sequence=["practice"],
-    	num_demo_participants=4,
-    )
 ]
 
 # if you set a property in SESSION_CONFIG_DEFAULTS, it will be inherited by all configs

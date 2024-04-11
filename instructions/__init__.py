@@ -1,15 +1,6 @@
-<<<<<<< HEAD
 from otree.api import *
 
 import time
-=======
-import time
-import random
-
-from otree.api import *
-
-from game import C as gameConstants
->>>>>>> ca28e7d1a85c2ca37b02bcb1729abd99036094c7
 
 doc = """
 Your app description
@@ -41,6 +32,7 @@ class Player(BasePlayer):
         initial=''
     )
 
+    """
     quiz_2 = models.StringField(
         label="What does the piggy bank on the top right indicate?",
         choices=[
@@ -52,16 +44,13 @@ class Player(BasePlayer):
         widget=widgets.RadioSelect,
         initial=''
     )
+    """
 
-
-
-
-    
 class Instructions1(Page):
     form_model = "player"
-    form_fields = ["quiz_1", "quiz_2"]
+    form_fields = ["quiz_1"]
 
 class PracticeGetReady(Page):
     pass
 
-page_sequence = [Instructions1, PracticeGetReady]] 
+page_sequence = [Instructions1, PracticeGetReady]
