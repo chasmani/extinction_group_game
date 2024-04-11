@@ -1,8 +1,10 @@
 {% extends "otree/Page.html" %}
 {% load otree static %}
 
-{% block global_styles  %}
-{% endblock %}
+{{ block global_styles  }}
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet" href="{{ static 'global/style.css' }}">
+{{ endblock }}
 
 {% block global_scripts  %}
 {% endblock %}

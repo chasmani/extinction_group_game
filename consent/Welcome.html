@@ -1,0 +1,52 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{{ block title }}
+  Welcome
+{{ endblock }}
+{{ block content }}
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-8">
+      
+      <img class="banner" src="{{ static 'resources/ucl-banner.png' }}"/>
+
+      <p>
+      Hello and welcome to our experiment.
+    </p>
+    <p>
+      Make sure you can work for to 10 minutes without any interruption. Please avoid any distractions (e.g., TV, music, smartphones, children, etc).
+    </p>
+    <p>
+      Please, do not refresh the webpage during the experiment. You will not be able to restart or complete the experiment if you refresh.
+    </p>
+    <p>
+      This decision making experiment involves repeatedly deciding between playing a "risky" and a "safe" lottery. Please, read the instructions very carefully and try to do the best you can with the given tasks. Your performance will be monitored to understand whether you are paying attention or not.
+      </p>
+      <h2>
+      What will you be doing in this experiment?
+    </h2>
+<p>
+      In this experiment, we are interested in how people decide between risky and safe options in a gambling task.
+    </p>
+    <p>
+      This experiment has 100 trials. In each trial, you will need to decide between a risky and a safe lottery. If you choose the risky lottery, you will, on average, get more bonus in this trial. However, there is a chance that you go extinct and do not receive any bonus for the experiment at all.
+    </p>
+    <p>
+      We advise against participation if you have or had problems with gambling (i.e., gambling addiction) at any point in your life.
+    </p>
+    <p>
+      At one point during the experiment, you may view a picture of a mushroom cloud. If you are not comfortable with this, please do not continue.
+    </p>
+    <p>
+      Press Next to start.
+        </p>
+{{ next_button }}
+
+
+    </div>
+  </div>
+</div>
+
+{{ endblock }}

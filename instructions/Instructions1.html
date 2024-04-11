@@ -1,0 +1,67 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{{ block title }}
+  Information and Consent
+{{ endblock }}
+{{ block content }}
+
+
+  <div class="row">
+    <div class="col-md-8 offset-md-2">
+      
+        <p class="alert">
+        Please read the below instructions carefully as there will be a comprehension check after the practice trials.
+    </p>
+        <p>
+        In this experiment, you can get a bonus payment on top of your regular payment. This bonus will depend on your answers to a series of gambles. There will be 100 trials in total. In each trial, you will need to decide between a "safe" and a "risky" lottery. Each lottery has different reward outcomes with different probabilities of each outcome occurring.
+    </p>
+
+        <p>Safe Lottery:</p>
+
+        <ul>
+            <li>50% chance of winning 1p</li>
+            <li>50% chance of winning 0p</li>
+        </ul>
+       
+        <p>Risky Lottery:</p>
+        
+        <ul>
+            <li>47.5% chance of winning 10p</li>
+            <li>47.5% chance of winning 0p</li>
+            <li>5% chance of <strong>extinction</strong></li>
+        </ul>
+        <p>
+        If you draw the <strong>extinction</strong> outcome, your bonus payment for the whole experiment will be wiped out, and you cannot get any more bonus payments for future trials. In other words, even if you draw the extinction outcome only once during the study, <strong>you will receive no bonus payment at all at the end of the study . However, you will still need to finish the rest of the trials </strong> (so choosing the extinction option will not save you any time).
+        </p>
+        <p>
+        During the experiment, you will always see your <strong>current bonus</strong> on the top right. The current trial number is on the top left, and the two lotteries are in the middle.
+    </p>
+        <p>
+        See below a picture of the display.
+    </p>
+    </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+        
+        <img src="{{ static 'resources/Instructions-3.png' }}" class="img-responsive img-instructions" alt="Decision Instructions"">
+
+        </div>
+        </div>
+
+        <div class="row">
+        <div class="col-md-8 offset-md-2">
+
+<h2>Quiz</h2>  
+
+{{ formfields }}
+
+{{ next_button }}
+
+
+    </div>
+  </div>
+
+
+{{ endblock }}

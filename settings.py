@@ -2,6 +2,21 @@ from os import environ
 
 SESSION_CONFIGS = [
     dict(
+        name='consent',
+        app_sequence=['consent'],
+        num_demo_participants=5,
+    ),
+    dict(
+        name='instructions',
+        app_sequence=['instructions'],
+        num_demo_participants=5,
+    ),
+    dict(
+        name='practice',
+        app_sequence=['practice'],
+        num_demo_participants=5,
+    ),
+    dict(
         name='game',
         app_sequence=['game'],
         num_demo_participants=5,
@@ -17,7 +32,12 @@ SESSION_CONFIG_DEFAULTS = dict(
     real_world_currency_per_point=1.00, participation_fee=0.00, doc=""
 )
 
-PARTICIPANT_FIELDS = []
+PARTICIPANT_FIELDS = [
+    "last_result",
+    "current_bonus",
+    "extinct"
+]
+
 SESSION_FIELDS = []
 
 # ISO-639 code

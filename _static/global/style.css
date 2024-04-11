@@ -1,0 +1,25 @@
+.banner {
+    width:100%;
+    margin-bottom:20px;
+}
+
+.alert {
+    color:red;
+}
+
+.img-instructions {
+    margin-bottom:16px;
+}
+
+.bonus {
+    color:#16a085;
+}
+
+.round-number {
+    color:#e67e22;
+}
+
+#result {
+    opacity: 1;
+    transition: opacity 1s ease-in-out;
+}
