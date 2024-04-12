@@ -1,0 +1,35 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{{ block title }}
+  Group Result
+{{ endblock }}
+{{ block content }}
+
+
+  <div class="row">
+    <div class="col-md-8 offset-md-2">
+
+    <div class="alert alert-danger" role="alert">
+            Extinction!
+    </div>
+
+    <p>The 5 players in your group made the following choices:</p>
+    <ul>
+        <li>Risky: {{ risky_count }}.</li>
+        <li>Safe: {{ safe_count }}.</li>
+    </ul>
+
+    <p>As a result, all the players in the group played the risky lottery.</p>
+
+    <p>You earned + £0.10 towards your bonus!</p>
+
+
+{{ next_button }}
+
+
+    </div>
+  </div>
+
+
+{{ endblock }}

@@ -1,0 +1,65 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{{ block title }}
+  Group Extinction
+{{ endblock }}
+{{ block content }}
+
+
+  <div class="row">
+    <div class="col-md-8 offset-md-2">
+
+      <p>NOTE TO MAX: ONLY SHOWN ON CONDITION WITH GROUP GAME WITH VOTING.</p>
+      
+    <h2>The Group</h2>
+
+      <p>You play this game in a group of 5 players.</p>
+        
+    <p>As a group, each round you decide how many of the players play risky lotteries, and how many play safe.</p>
+
+    <h2>Voting</h2>
+
+    <p>Each round, each player votes on how many players, from 0 to 5, that they want to play a risky lottery (instead of the safe lottery).</p>
+
+    <p>The votes of all the players are collected and the middle value is chosen (examples below). That determines how many players will be randomly selected to play the risky lottery</p>
+
+    <h2>Group Outcomes</h2>
+
+    <p>Each player plays the lottery on their own, and if they earn a bonus then that counts towards their own individual bonus.</p>
+
+        <p>
+        <strong>IMPORTANT</strong>: If <strong>any player</strong> draws the <strong>extinction</strong> outcome from the risky lottery, the <strong>entire team loses the bonus payments</strong> for the whole experiment, and will not be able to earn any bonus.
+        </p>
+        
+    </div>
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+        <h2>Example 1</h2>
+        <img src="{{ static 'resources/group_median_4.png' }}" class="img-responsive img-instructions" alt="Group Schematic Voting"">
+
+        <p>In this example, the players voted: 0,3,4,5,5.</p>
+        <p>The middle value is taken of 4, and so 4 randomly selected players in the group will play the risky lottery and the other player will play the safe lottery. </p>
+
+        <h2>Example 2</h2>
+        <img src="{{ static 'resources/group_median_1.png' }}" class="img-responsive img-instructions" alt="Group Schematic Voting Risky"">
+
+        <p>In this example, the players voted: 0,0,1,1,4.</p>
+        <p>The middle value is taken of 1, and so 1 randomly selected player in the group will play the risky lottery and the other 4 players will play the safe lottery. </p>
+
+        </div> 
+        </div>
+
+        <div class="row">
+        <div class="col-md-8 offset-md-2">
+
+{{ formfields }}
+
+{{ next_button }}
+
+
+    </div>
+  </div>
+
+
+{{ endblock }}

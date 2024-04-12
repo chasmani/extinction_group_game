@@ -56,7 +56,17 @@ class Decision(Page):
             else:
                 player.participant.vars['last_result'] = "extinction"
                 player.participant.vars['extinct'] = True
-                
 
+class GroupResult(Page):
 
-page_sequence = [Decision]
+    def vars_for_template(player):
+
+        risky_count = 3
+        safe_count = 2
+
+        return {
+            'risky_count': risky_count,
+            'safe_count': safe_count,
+        }
+
+page_sequence = [Decision, GroupResult]

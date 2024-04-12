@@ -46,7 +46,8 @@ PARTICIPANT_FIELDS = [
 PARTICIPANT_FIELDS = [
     "last_result",
     "current_bonus",
-    "extinct"
+    "extinct",
+    "condition"
 ]
 
 SESSION_FIELDS = []

@@ -55,4 +55,7 @@ class Results(Page):
     def vars_for_template(player: Player):
         pass
 
-page_sequence = [GroupWaitPage, Decision, ResultsWaitPage, Results]
+class OptimalChoices(Page):
+    pass
+
+page_sequence = [GroupWaitPage, OptimalChoices, Decision, ResultsWaitPage, Results]

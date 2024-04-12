@@ -19,16 +19,24 @@
       <p>If a player wins a bonus on a lottery then that counts towards their own individual bonus.</p>
 
         <p>
-        If <strong>any player</strong> draws the <strong>extinction</strong> outcome from the risky lottery, the <strong>entire team loses the bonus payments</strong> for the whole experiment, and will not be able to earn any bonus.
+        <strong>IMPORTANT:</strong> If <strong>any player</strong> draws the <strong>extinction</strong> outcome from the risky lottery, the <strong>entire team loses the bonus payments</strong> for the whole experiment, and will not be able to earn any bonus.
         </p>
         
     </div>
     <div class="row">
         <div class="col-md-8 offset-md-2">
         
+        <h2>Example 1</h2>
+
         <img src="{{ static 'resources/group_schematic_choices.png' }}" class="img-responsive img-instructions" alt="Group Schematic Instructions"">
 
         <p>In this example, 4 players have chosen the safe lottery and 1 player has chosen the risky lottery.</p>
+
+        <h2>Example 2</h2>
+
+        <img src="{{ static 'resources/group_choices_risky.png' }}" class="img-responsive img-instructions" alt="Group Schematic Instructions"">
+
+        <p>In this example, 2 players have chosen the safe lottery and 3 player have chosen the risky lottery.</p>
 
         </div>
         </div>
@@ -36,6 +44,8 @@
         <div class="row">
         <div class="col-md-8 offset-md-2">
 
+
+{{ formfields }}
 
 {{ next_button }}
 

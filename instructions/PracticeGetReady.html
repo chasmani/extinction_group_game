@@ -11,6 +11,10 @@
 
 <p> Please click continue to start the practice trials.</p>
 
+{% if player.participant.condition != "indy" %}
+<p><strong>NOTE: In the practice game you will not play with real people. The computer will play for the other players.</strong></p>
+{% endif %}
+
       {{ next_button }}
 
 
