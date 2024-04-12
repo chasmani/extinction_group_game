@@ -18,18 +18,49 @@ class Group(BaseGroup):
     pass
 
 class Player(BasePlayer):
-    decision = models.StringField(
+    lottery_decision = models.StringField(
+        label="Please choose the lottery you would like to play this round.",
         choices=[
-            ['risky', 'f'],
-            ['safe', 'j']
+            ['risky', 'Risky Lottery'],
+            ['safe', 'Safe Lottery']
         ],
         widget=widgets.RadioSelect
     )
 
-class Decision(Page):
+    voter_decision = models.IntegerField(
+        label="Please vote for how many players you would like to play the risky lottery.",
+        choices=[0,1,2,3,4,5],
+        widget=widgets.RadioSelect
+    )
+
+    condition_choice = models.StringField(
+        label="Please choose the condition you would like to play in.",
+        choices=[
+            ['indy', 'Independent'],
+            ['group', 'Group with Independent Choices'],
+            ['voting', 'Group with Median Voting'],
+        ],
+        widget=widgets.RadioSelect
+    )
+
+
+class ConditionChoice(Page):
+    form_model = "player"
+    form_fields = ["condition_choice"]
+
+    def is_displayed(player):
+        return player.round_number == 1
+
+    def before_next_page(player, timeout_happened):
+        player.participant.vars['condition'] = player.condition_choice
+
+class IndyDecision(Page):
 
     form_model = 'player'
-    form_fields = ['decision']
+    form_fields = ['lottery_decision']
+
+    def is_displayed(player):
+        return player.participant.condition == 'indy'
 
     def before_next_page(player, timeout_happened):
         print(player, timeout_happened)
@@ -40,24 +71,36 @@ class Decision(Page):
             player.participant.vars['current_bonus'] = 0
             player.participant.vars['extinct'] = False
 
-        if player.decision == 'safe':
-            if random_roll < 0.5:
-                player.participant.vars['last_result'] = "0"
-            else:
-                player.participant.vars['last_result'] = "1"
-                player.participant.vars['current_bonus'] += 0.01
+        if player.participant.extinct:
+            player.participant.vars['last_result'] = "0"
+        else:
+            if player.lottery_decision == 'safe':
+                if random_roll < 0.5:
+                    player.participant.vars['last_result'] = "0"
+                else:
+                    player.participant.vars['last_result'] = "1"
+                    player.participant.vars['current_bonus'] += 0.01
 
-        if player.decision == 'risky':
-            if random_roll < 0.475:
-                player.participant.vars['last_result'] = "0"
-            elif random_roll < 0.95:
-                player.participant.vars['last_result'] = "10"
-                player.participant.vars['current_bonus'] += 0.1
-            else:
-                player.participant.vars['last_result'] = "extinction"
-                player.participant.vars['extinct'] = True
+            if player.lottery_decision == 'risky':
+                if random_roll < 0.475:
+                    player.participant.vars['last_result'] = "0"
+                elif random_roll < 0.95:
+                    player.participant.vars['last_result'] = "10"
+                    player.participant.vars['current_bonus'] += 0.1
+                else:
+                    player.participant.vars['last_result'] = "extinction"
+                    player.participant.vars['extinct'] = True
+
+class GroupDecision(Page):
+    
+    def is_displayed(player):
+        return player.participant.condition == 'group'
+
 
 class GroupResult(Page):
+
+    def is_displayed(player):
+        return player.participant.condition == 'group'
 
     def vars_for_template(player):
 
@@ -68,5 +111,20 @@ class GroupResult(Page):
             'risky_count': risky_count,
             'safe_count': safe_count,
         }
+    
+class VotingDecision(Page):
+    
+    def is_displayed(player):
+        return player.participant.condition == 'group'
 
-page_sequence = [Decision, GroupResult]
+class VotingResult(Page):
+    
+    def is_displayed(player):
+        return player.participant.condition == 'group'
+
+page_sequence = [ConditionChoice, 
+                 IndyDecision, 
+                 GroupDecision,
+                 GroupResult,
+                 VotingDecision,
+                 VotingResult]

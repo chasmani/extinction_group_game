@@ -48,12 +48,18 @@
         </div>
         <div class="col-md-3 bonus">
             <div class="hidden-initially">
-            <h4>Your Current Bonus</h4>
+
             {% if player.round_number == 1 %}
+                <h4>Your Current Bonus</h4>
                 <h2>£0.00</h2>
+            {% elif player.participant.extinct %}
+                <h4 class="extinct-text">You Are Extinct</h4>
+                <h2 class="extinct-text">£0.00</h2>
             {% else %}
+                <h4>Your Current Bonus</h4>
                 <h2>£{{ player.participant.current_bonus|to2 }}</h2>
             {% endif %}
+
             </div>
         </div>
         
@@ -64,7 +70,7 @@
 <div>
   <div class="row">
     <div class="col-md-10 offset-md-1">
-        <div class="hidden-initially">
+        <div class="hidden-initially hidden" id="game-screen">
             <img src="{{ static 'resources/game-screen.png' }}" class="img-responsive img-instructions" alt="Decision Instructions"">
         </div>
     </div>
@@ -76,7 +82,7 @@
 
 
 <form method="post" id="my_form">
-    {{ form.decision }}
+    {{ form.lottery_decision }}
     <button type="submit" id="submit_button" style="display: none;"></button>
 </form>
 
@@ -87,22 +93,27 @@
 {% block scripts %}
 
 <script>
-    document.addEventListener("keydown", function(event) {
-      if (event.key === "f") {
-        document.querySelector("input[value='risky']").checked = true;
-        document.getElementById("submit_button").click();
-      } else if (event.key === "j") {
-        document.querySelector("input[value='safe']").checked = true;
 
-        document.getElementById("submit_button").click();
-      }
-    });
+    document.addEventListener("keydown", function(event) {
+        let elementVisible = document.getElementById("game-screen").offsetParent !== null;
+        if (event.key === "f") {
+    document.querySelector("input[value='risky']").checked = true;
+    if (elementVisible) {
+      document.getElementById("submit_button").click();
+    }
+  } else if (event.key === "j") {
+    document.querySelector("input[value='safe']").checked = true;
+    if (elementVisible) {
+      document.getElementById("submit_button").click();
+    }
+  }
+});
     </script>
 
 <script>
 
 document.addEventListener('DOMContentLoaded', function() {
-    var elements = document.querySelectorAll('.hidden-initially-x');
+    var elements = document.querySelectorAll('.hidden-initially');
     elements.forEach(function(element) {
       setTimeout(function() {
         element.classList.remove('hidden');
