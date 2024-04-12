@@ -17,6 +17,11 @@ SESSION_CONFIGS = [
         num_demo_participants=5,
     ),
     dict(
+        name='payment',
+        app_sequence=['payment'],
+        num_demo_participants=5,
+    ),
+    dict(
         name='full_experiment',
         app_sequence=['consent', 'instructions', 'practice'],
         num_demo_participants=5,

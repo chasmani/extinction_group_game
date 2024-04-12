@@ -1,0 +1,47 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{{ block title }}
+  Group Extinction
+{{ endblock }}
+{{ block content }}
+
+
+  <div class="row">
+    <div class="col-md-8 offset-md-2">
+
+      <p>NOTE TO MAX: ONLY SHOWN ON CONDITION WITH GROUP GAME WITHOUT VOTING.</p>
+      
+      <p>You play this game in a group of 5 players.</p>
+        
+      <p>Each round, each player makes a choice between the safe and the risky lottery.</p>
+
+      <p>If a player wins a bonus on a lottery then that counts towards their own individual bonus.</p>
+
+        <p>
+        If <strong>any player</strong> draws the <strong>extinction</strong> outcome from the risky lottery, the <strong>entire team loses the bonus payments</strong> for the whole experiment, and will not be able to earn any bonus.
+        </p>
+        
+    </div>
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+        
+        <img src="{{ static 'resources/group_schematic_choices.png' }}" class="img-responsive img-instructions" alt="Group Schematic Instructions"">
+
+        <p>In this example, 4 players have chosen the safe lottery and 1 player has chosen the risky lottery.</p>
+
+        </div>
+        </div>
+
+        <div class="row">
+        <div class="col-md-8 offset-md-2">
+
+
+{{ next_button }}
+
+
+    </div>
+  </div>
+
+
+{{ endblock }}

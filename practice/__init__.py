@@ -48,9 +48,9 @@ class Decision(Page):
                 player.participant.vars['current_bonus'] += 0.01
 
         if player.decision == 'risky':
-            if random_roll < 0.45:
+            if random_roll < 0.475:
                 player.participant.vars['last_result'] = "0"
-            elif random_roll < 0.9:
+            elif random_roll < 0.95:
                 player.participant.vars['last_result'] = "10"
                 player.participant.vars['current_bonus'] += 0.1
             else:

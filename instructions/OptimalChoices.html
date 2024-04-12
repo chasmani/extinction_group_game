@@ -1,0 +1,98 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{{ block title }}
+  Strategy
+{{ endblock }}
+{{ block content }}
+
+
+  <div class="row">
+    <div class="col-md-8 offset-md-2">
+
+        
+        
+    </div>
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+        
+
+            <div class="row">
+                
+                <h3>Optimal Strategy</h3>
+
+                <p>NOTE TO MAX: SHOW THIS ONLY ON THE RELEVANT CONDITIONS.</p>
+      
+                <p>The strategy that pays the highest bonus, on average, is to play a total of 2 risky lotteries.</p>
+
+                <p>NOTE: There is always an element of chance in the lotteries, so you might do better or worse than the average.</p>
+
+                <div>
+      
+                  <h4>Average Bonus</h4>
+                  <script
+                  src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
+                  </script>
+      
+                  <canvas id="globalChart" style="width:100%;max-width:700px;height:300px"></canvas>
+      
+                  <script>
+                  var xValues = [0,1,2,3,4,5,6,7,8,9,10];
+      
+                  new Chart("globalChart", {
+                    type: "line",
+                    data: {
+                      labels: xValues,
+                      datasets: [{
+                        data: [0.10, 0.21, 0.42, 0.35, 0.17, 0.08, 0.05, 0.03, 0.02, 0.01, 0.01],
+                        borderColor: "#8e44ad",
+                        fill: false,
+                        lineTension:0,
+                      }]
+                    },
+                    options: {
+                      legend: {display: false},
+                      tooltips: {
+                           enabled: false
+                      },
+                      scales: {
+                          yAxes: [{
+                                    scaleLabel: {
+                                    display: true,
+                                    labelString: 'Average Bonus'
+                                  },
+                                  display: true,
+                                  
+                              }],
+                              xAxes: [{
+                                    scaleLabel: {
+                                    display: true,
+                                    labelString: 'Total Risky Choices'
+                                  },
+                                  display: true,
+                                  
+                              }]
+                      },
+                    }
+                  });
+                  </script>
+      
+                </div>
+
+
+            </div>
+            </div>
+
+
+        <div class="row">
+        <div class="col-md-8 offset-md-2">
+
+
+{{ next_button }}
+
+
+    </div>
+  </div>
+
+
+{{ endblock }}

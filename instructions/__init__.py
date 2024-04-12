@@ -50,7 +50,23 @@ class Instructions1(Page):
     form_model = "player"
     form_fields = ["quiz_1"]
 
+class InstructionsGroup(Page):
+    pass
+
+class GroupIndyChoices(Page):
+    pass
+
+class GroupVotingChoices(Page):
+    pass
+
 class PracticeGetReady(Page):
     pass
 
-page_sequence = [Instructions1, PracticeGetReady]
+class OptimalChoices(Page):
+    pass
+
+page_sequence = [Instructions1, 
+                 GroupIndyChoices, 
+                 GroupVotingChoices, 
+                 OptimalChoices,
+                 PracticeGetReady]
