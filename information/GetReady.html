@@ -8,17 +8,8 @@
 {{ block content }}
 
 
-{% if player.participant.condition == "indy" %}
-
      <p>The game will start after this page. Press Next to continue.</p>
 
-     {{ next_button }}
-
-{% else %}
-    
-    <p>The game will start after this page, once the countdown reaches zero.</p>
-
-{% endif %}
-
+        {{ next_button }}
 
 {{ endblock }}

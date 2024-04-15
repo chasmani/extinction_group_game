@@ -1,0 +1,58 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{{ block title }}
+  Group Result
+{{ endblock }}
+{{ block content }}
+
+
+  <div class="row">
+    <div class="col-md-6 offset-md-3">
+
+    <h4>Your Outcome</h4>
+    {% if player.participant.last_result == '0' %}
+        <div class="alert alert-secondary" role="alert">
+            +£0.00
+        </div>
+
+    {% elif player.participant.last_result == '1' %}
+        <div class="alert alert-success" role="alert">
+            +£0.01
+        </div>
+
+    {% elif player.participant.last_result == '10' %}
+        <div class="alert alert-success" role="alert">
+            +£0.10
+        </div>
+
+    {% elif player.participant.last_result == 'extinction' %}
+        <div class="alert alert-danger" role="alert">
+            Extinction! One or more of your group drew the extinction outcome!
+        </div>
+    {% endif %}
+
+    {% if player.participant.extinct %}
+        <div class="alert alert-danger" role="alert">
+            <p><strong>You are extinct!</strong> You will still need to continue playing the remaining trials.
+            However, you will not earn any bonus.</p>
+        </div>
+    {% endif %}
+
+    <h4>Group Choices</h4>
+
+    <p>The 5 players in your group made the following choices:</p>
+    <ul>
+        <li>Risky: {{ risky_count }}.</li>
+        <li>Safe: {{ safe_count }}.</li>
+    </ul>
+
+
+{{ next_button }}
+
+
+    </div>
+  </div>
+
+
+{{ endblock }}

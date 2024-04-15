@@ -50,12 +50,9 @@ class ConditionChoice(Page):
 class OptimalChoices(Page):
     
     def is_displayed(player):
-        return player.participant.vars['condition'] == 'group' and player.participant.vars['information'] == 'optimal'
+        return player.participant.vars['condition'] != 'indy' and player.participant.vars['information'] == 'optimal'
 
 class GetReady(Page):
     
-    # Add countdown timer
-    timeout_seconds = 30
-    timeout_warning = "You have limited time to complete this page."
-
+    pass
 page_sequence = [ConditionChoice, OptimalChoices, GetReady]

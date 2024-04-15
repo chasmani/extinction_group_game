@@ -1,0 +1,133 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{{ block content }}
+
+<div>
+<div class="row text-center">
+    <div class="col-md-3 round-number">
+        
+        <div class="hidden-initially">
+
+                <h4>Trial Number</h4>
+                <h2>{{ player.round_number }} of {{ C.NUM_ROUNDS }}</h2>
+            </div>
+        </div>
+        <div class="col-md-6">
+            {% if player.round_number > 1 %}
+            <div id="result">
+            
+                {% if player.participant.last_result == '0' %}
+                <div class="alert alert-secondary" role="alert">
+                    0
+                </div>
+
+                {% elif player.participant.last_result == '1' %}
+                <div class="alert alert-success" role="alert">
+                    +£0.01
+                </div>
+                {% elif player.participant.last_result == '10' %}
+                <div class="alert alert-success" role="alert">
+                    +£0.10
+                </div>
+                
+                {% elif player.participant.last_result == 'extinction' %}
+                <div class="alert alert-danger" role="alert">
+                    Extinction!
+                </div>
+                {% endif %}
+            </div>
+            
+                {% if player.participant.extinct %}
+                    <div class="alert alert-danger" role="alert">
+                        <p><strong>You are extinct!</strong> You will still need to continue playing the remaining trials.
+                        However, you will not earn any bonus.</p>
+                    </div>
+                {% endif %}
+            {% endif %}
+        </div>
+        <div class="col-md-3 bonus">
+            <div class="hidden-initially">
+
+            {% if player.round_number == 1 %}
+                <h4>Your Current Bonus</h4>
+                <h2>£0.00</h2>
+            {% elif player.participant.extinct %}
+                <h4 class="extinct-text">You Are Extinct</h4>
+                <h2 class="extinct-text">£0.00</h2>
+            {% else %}
+                <h4>Your Current Bonus</h4>
+                <h2>£{{ player.participant.current_bonus|to2 }}</h2>
+            {% endif %}
+
+            </div>
+        </div>
+        
+    </div>
+</div>
+
+</div>
+<div>
+  <div class="row">
+    <div class="col-md-10 offset-md-1">
+        <div class="hidden-initially hidden" id="game-screen">
+            <img src="{{ static 'resources/game-screen.png' }}" class="img-responsive img-instructions" alt="Decision Instructions"">
+        </div>
+    </div>
+</div>
+</div>
+
+
+<div class="hidden">
+
+
+<form method="post" id="my_form">
+    {{ form.lottery_decision }}
+    <button type="submit" id="submit_button" style="display: none;"></button>
+</form>
+
+</div>
+
+{{ endblock }}
+
+{% block scripts %}
+
+<script>
+
+    document.addEventListener("keydown", function(event) {
+        let elementVisible = document.getElementById("game-screen").offsetParent !== null;
+        if (event.key === "f") {
+    document.querySelector("input[value='risky']").checked = true;
+    if (elementVisible) {
+      document.getElementById("submit_button").click();
+    }
+  } else if (event.key === "j") {
+    document.querySelector("input[value='safe']").checked = true;
+    if (elementVisible) {
+      document.getElementById("submit_button").click();
+    }
+  }
+});
+    </script>
+
+<script>
+
+document.addEventListener('DOMContentLoaded', function() {
+    var elements = document.querySelectorAll('.hidden-initially');
+    elements.forEach(function(element) {
+      setTimeout(function() {
+        element.classList.remove('hidden');
+      }, 1000); // 1000 milliseconds = 1 second
+    });
+  });
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+      setTimeout(function() {
+        document.getElementById('result').style.opacity = 0;
+      }, 10); // Add a slight delay to start the transition
+    });
+  </script>
+
+{% endblock %}

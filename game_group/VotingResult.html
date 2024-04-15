@@ -1,0 +1,82 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{{ block title }}
+  Group Result
+{{ endblock }}
+{{ block content }}
+
+
+  <div class="row">
+    <div class="col-md-6 offset-md-3">
+
+    <h4>Your Outcome</h4>
+    {% if player.participant.last_result == '0' %}
+        <div class="alert alert-secondary" role="alert">
+            +£0.00
+        </div>
+
+    {% elif player.participant.last_result == '1' %}
+        <div class="alert alert-success" role="alert">
+            +£0.01
+        </div>
+
+    {% elif player.participant.last_result == '10' %}
+        <div class="alert alert-success" role="alert">
+            +£0.10
+        </div>
+
+    {% elif player.participant.last_result == 'extinction' %}
+        <div class="alert alert-danger" role="alert">
+            Extinction! One or more of your group drew the extinction outcome!
+        </div>
+    {% endif %}
+
+    {% if player.participant.extinct %}
+        <div class="alert alert-danger" role="alert">
+            <p><strong>You are extinct!</strong> You will still need to continue playing the remaining trials.
+            However, you will not earn any bonus.</p>
+        </div>
+    {% endif %}
+
+    <h4>Group Votes</h4>
+
+    <p>Each of the 5 players in your group voted for how many players they wanted to play the risky lottery.</p>
+
+    <p>Your group voted: {{ player_votes }}. As a result the computer randomly selected players to play the following lotteries:</p>
+    <ul>
+        <li>Risky lottery count: {{ risky_count }} </li>
+        <li>Safe lottery count: {{ safe_count }} </li>
+    </ul>   
+    {% if player.lottery_decision == "risky" %}
+            <p>You were selected to play the risky lottery.</p>
+    {% else %}
+            <p>You were selected to play the safe lottery.</p>
+    {% endif %}
+
+        <p>Your result this round: 
+            {% if player.participant.last_result == '0' %}
+        
+            +£0.00
+        
+    {% elif player.participant.last_result == '1' %}
+            +£0.01
+        
+    {% elif player.participant.last_result == '10' %}
+            +£0.10
+        
+    {% elif player.participant.last_result == 'extinction' %}
+            Extinction! One or more of your group drew the extinction outcome!
+        
+    {% endif %}
+
+        </p>
+
+{{ next_button }}
+
+
+    </div>
+  </div>
+
+
+{{ endblock }}

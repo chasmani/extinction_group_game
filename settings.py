@@ -22,13 +22,28 @@ SESSION_CONFIGS = [
         num_demo_participants=5,
     ),
     dict(
+        name='game_individual',
+        app_sequence=['game_indy'],
+        num_demo_participants=5,
+    ),
+    dict(
+        name='game_group',
+        app_sequence=['game_group'],
+        num_demo_participants=5,
+    ),
+    dict(
         name='payment',
         app_sequence=['payment'],
         num_demo_participants=5,
     ),
     dict(
-        name='full_experiment',
-        app_sequence=['consent', 'instructions', 'practice'],
+        name='full_experiment_individual',
+        app_sequence=['consent', 'instructions', 'practice', 'information', 'game_indy', 'payment'],
+        num_demo_participants=5,
+    ),
+    dict(
+        name='full_experiment_group',
+        app_sequence=['consent', 'instructions', 'practice', 'information', 'game_group', 'payment'],
         num_demo_participants=5,
     ),
 ]

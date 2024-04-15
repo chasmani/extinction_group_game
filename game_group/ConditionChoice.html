@@ -1,0 +1,24 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{{ block title }}
+  Choose the Experimental Condition
+{{ endblock }}
+{{ block content }}
+
+
+  <div class="row">
+    <div class="col-md-8 offset-md-2">
+
+      <p>This page is only for testing. This will not be shown in the actual experiment, where conditions will be randomly assigned.</p>
+      
+{{ formfields }}
+
+{{ next_button }}
+
+
+    </div>
+  </div>
+
+
+{{ endblock }}
