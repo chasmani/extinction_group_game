@@ -17,6 +17,11 @@ SESSION_CONFIGS = [
         num_demo_participants=5,
     ),
     dict(
+        name='information',
+        app_sequence=['information'],
+        num_demo_participants=5,
+    ),
+    dict(
         name='payment',
         app_sequence=['payment'],
         num_demo_participants=5,
@@ -47,7 +52,8 @@ PARTICIPANT_FIELDS = [
     "last_result",
     "current_bonus",
     "extinct",
-    "condition"
+    "condition",
+    "information",
 ]
 
 SESSION_FIELDS = []

@@ -1,0 +1,24 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+{% load static %}
+
+{{ block title }}  
+    Get Ready
+{{ endblock }}
+{{ block content }}
+
+
+{% if player.participant.condition == "indy" %}
+
+     <p>The game will start after this page. Press Next to continue.</p>
+
+     {{ next_button }}
+
+{% else %}
+    
+    <p>The game will start after this page, once the countdown reaches zero.</p>
+
+{% endif %}
+
+
+{{ endblock }}

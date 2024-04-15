@@ -95,10 +95,16 @@ class GroupInstructions2(Page):
     form_model = "player"
     form_fields = ["quiz_group_extinction"]
 
+    def is_displayed(player):
+        return player.participant.condition == 'group'
+
 class VoterInstructions2(Page):
     form_model = "player"
     form_fields = ["quiz_group_extinction",
                    "quiz_voting"]
+    
+    def is_displayed(player):
+        return player.participant.condition == 'voting'
 
 class PracticeGetReady(Page):
     pass

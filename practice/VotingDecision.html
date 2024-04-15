@@ -1,0 +1,82 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{{ block content }}
+
+<div>
+<div class="row text-center">
+    <div class="col-md-3 round-number">
+        
+        <div>
+
+                <h4>Trial Number</h4>
+                <h2>{{ player.round_number }} of {{ C.NUM_ROUNDS }}</h2>
+            </div>
+        </div>
+        <div class="col-md-6">
+            {% if player.round_number > 1 %}
+            
+            
+                {% if player.participant.extinct %}
+                    <div class="alert alert-danger" role="alert">
+                        <p><strong>You are extinct!</strong> You will still need to continue playing the remaining trials.
+                        However, you will not earn the bonus.</p>
+                    </div>
+                {% endif %}
+            {% endif %}
+        </div>
+        <div class="col-md-3 bonus">
+            <div>
+
+            {% if player.round_number == 1 %}
+                <h4>Your Current Bonus</h4>
+                <h2>£0.00</h2>
+            {% elif player.participant.extinct %}
+                <h4 class="extinct-text">You Are Extinct</h4>
+                <h2 class="extinct-text">£0.00</h2>
+            {% else %}
+                <h4>Your Current Bonus</h4>
+                <h2>£{{ player.participant.current_bonus|to2 }}</h2>
+            {% endif %}
+
+            </div>
+        </div>
+        
+    </div>
+</div>
+
+</div>
+<div>
+  <div class="row">
+    <div class="col-md-10 offset-md-1">
+        <div id="game-screen">
+            <img src="{{ static 'resources/game-screen-group.png' }}" class="img-responsive img-instructions" alt="Decision Instructions"">
+        </div>
+    </div>
+
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        
+        {{ formfields }}
+
+        {{ next_button }}
+    </div>
+
+</div>
+
+
+
+{{ endblock }}
+
+
+{% block scripts %}
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+      setTimeout(function() {
+        document.getElementById('result').style.opacity = 0;
+      }, 10); // Add a slight delay to start the transition
+    });
+  </script>
+
+{% endblock %}
