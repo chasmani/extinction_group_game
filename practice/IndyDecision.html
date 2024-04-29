@@ -9,7 +9,7 @@
         
         <div class="hidden-initially">
 
-                <h4>Trial Number</h4>
+                <h4>Round Number</h4>
                 <h2>{{ player.round_number }} of {{ C.NUM_ROUNDS }}</h2>
             </div>
         </div>
@@ -24,11 +24,11 @@
 
                 {% elif player.participant.last_result == '1' %}
                 <div class="alert alert-success" role="alert">
-                    +£0.01
+                    +1p
                 </div>
                 {% elif player.participant.last_result == '10' %}
                 <div class="alert alert-success" role="alert">
-                    +£0.10
+                    +10p
                 </div>
                 
                 {% elif player.participant.last_result == 'extinction' %}
@@ -40,7 +40,7 @@
             
                 {% if player.participant.extinct %}
                     <div class="alert alert-danger" role="alert">
-                        <p><strong>You are extinct!</strong> You will still need to continue playing the remaining trials.
+                        <p><strong>You are extinct!</strong> You will still need to continue playing the remaining rounds to get the base payment.
                         However, you will not earn any bonus.</p>
                     </div>
                 {% endif %}
@@ -51,13 +51,13 @@
 
             {% if player.round_number == 1 %}
                 <h4>Your Current Bonus</h4>
-                <h2>£0.00</h2>
+                <h2>0p</h2>
             {% elif player.participant.extinct %}
                 <h4 class="extinct-text">You Are Extinct</h4>
-                <h2 class="extinct-text">£0.00</h2>
+                <h2 class="extinct-text">0p</h2>
             {% else %}
                 <h4>Your Current Bonus</h4>
-                <h2>£{{ player.participant.current_bonus|to2 }}</h2>
+                <h2>{{ player.participant.current_bonus }}p</h2>
             {% endif %}
 
             </div>
@@ -71,7 +71,11 @@
   <div class="row">
     <div class="col-md-10 offset-md-1">
         <div class="hidden-initially hidden" id="game-screen">
+            {% if player.participant.switched %}
+            <img src="{{ static 'resources/game-screen-switched.png' }}" class="img-responsive img-instructions" alt="Decision Instructions"">
+            {% else %}
             <img src="{{ static 'resources/game-screen.png' }}" class="img-responsive img-instructions" alt="Decision Instructions"">
+            {% endif %}
         </div>
     </div>
 </div>
@@ -92,23 +96,32 @@
 
 {% block scripts %}
 
+
 <script>
 
     document.addEventListener("keydown", function(event) {
         let elementVisible = document.getElementById("game-screen").offsetParent !== null;
-        if (event.key === "f") {
+        if (event.key === "j") {
+    {% if player.participant.switched %}
     document.querySelector("input[value='risky']").checked = true;
+    {% else %}
+    document.querySelector("input[value='safe']").checked = true;
+    {% endif %}
     if (elementVisible) {
       document.getElementById("submit_button").click();
     }
-  } else if (event.key === "j") {
+  } else if (event.key === "f") {
+    {% if player.participant.switched %}
     document.querySelector("input[value='safe']").checked = true;
+    {% else %}
+    document.querySelector("input[value='risky']").checked = true;
+    {% endif %}
     if (elementVisible) {
       document.getElementById("submit_button").click();
     }
   }
 });
-    </script>
+</script>
 
 <script>
 

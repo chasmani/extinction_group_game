@@ -18,17 +18,15 @@ class Subsession(BaseSubsession):
 class Group(BaseGroup):
     pass
 
-
-
 class Player(BasePlayer):
     
     quiz_extinction = models.StringField(
         label="What happens if you choose the risky lottery and you draw the extinction option?",
         choices=[
             ['lose_nothing', 'Nothing.'],
-            ['lose_trial', 'I will not get a bonus for this trial.'],
-            ['lose_past', 'I will keep all my past bonus money, but I cannot make more bonus money in the next trials.'],
-            ['lose_all', 'I will lose all my bonus money, and I cannot get any more bonus payments for future trials.'],
+            ['lose_round', 'I will not get a bonus for this round.'],
+            ['lose_past', 'I will keep all my past bonus money, but I cannot make more bonus money in the next rounds.'],
+            ['lose_all', 'I will lose all my bonus money, and I cannot get any more bonus payments for future rounds.'],
         ],
         widget=widgets.RadioSelect,
         initial=''
@@ -68,28 +66,60 @@ class Player(BasePlayer):
         widget=widgets.RadioSelect
     )
 
+    attention_check = models.StringField(
+        label="This is a question to check that you are paying attention, please select option 3",
+        choices=[
+            ['1', '1'],
+            ['2', '2'],
+            ['3', '3'],
+            ['4', '4'],
+        ],
+        widget=widgets.RadioSelect
+    )
+
+    lottery_switch_choice = models.StringField(
+        label="Which way round do you want to see the lotteries?",
+        choices=[
+            ['not_switched', 'Risky Left, Safe Right'],
+            ['switched', 'Safe Left, Risky Right']
+        ],
+        widget=widgets.RadioSelect
+    )
+
+
 def quiz_extinction_error_message(player, value):
     if value != 'lose_all':
+        player.participant.wrong_answers.append('quiz_extinction')
         return 'That is not correct. Please try again.'
 
 def quiz_group_extinction_error_message(player, value):
     if value != 'extinct_all':
+        player.participant.wrong_answers.append('quiz_group_extinction')
         return 'That is not correct. Please try again.'
 
 def quiz_voting_error_message(player, value):
     if value != 'voting_median':
+        player.participant.wrong_answers.append('quiz_voting')
+        return 'That is not correct. Please try again.'
+
+def attention_check_error_message(player, value):
+    if value != '3':
+        player.participant.wrong_answers.append('attention_check')
         return 'That is not correct. Please try again.'
 
 class ConditionChoice(Page):
     form_model = "player"
-    form_fields = ["condition_choice"]
+    form_fields = ["condition_choice", "lottery_switch_choice"]
 
     def before_next_page(player, timeout_happened):
         player.participant.vars['condition'] = player.condition_choice
+        player.participant.vars["switched"] = player.lottery_switch_choice == 'switched'
+        player.participant.wrong_answers = []
 
 class Instructions1(Page):
     form_model = "player"
-    form_fields = ["quiz_extinction"]
+    form_fields = ["quiz_extinction", "attention_check"]
+
 
 class GroupInstructions2(Page):
     form_model = "player"

@@ -15,7 +15,7 @@
             </strong>
     </p>
         <p>
-        In this experiment, you can get a bonus payment on top of your regular payment. This bonus will depend on your answers to a series of gambles. There will be 100 trials in total. In each trial, you will need to decide between a "safe" and a "risky" lottery. Each lottery has different reward outcomes with different probabilities of each outcome occurring.
+        In this experiment, you can get a bonus payment on top of your regular payment. This bonus will depend on your answers to a series of gambles. In each round, you will need to decide between a "safe" and a "risky" lottery. Each lottery has different reward outcomes with different probabilities of each outcome occurring.
     </p>
 
         <p>Safe Lottery:</p>
@@ -33,10 +33,10 @@
             <li>5% chance of <strong>extinction</strong></li>
         </ul>
         <p>
-        If you draw the <strong>extinction</strong> outcome, your bonus payment for the whole experiment will be wiped out, and you cannot get any more bonus payments for future trials. In other words, even if you draw the extinction outcome only once during the study, <strong>you will receive no bonus payment at all at the end of the study . However, you will still need to finish the rest of the trials </strong> (so choosing the extinction option will not save you any time).
+        If you draw the <strong>extinction</strong> outcome, your bonus payment for the whole experiment will be wiped out, and you cannot get any more bonus payments for future rounds. In other words, even if you draw the extinction outcome only once during the study, <strong>you will receive no bonus payment at all at the end of the study. However, you will still need to finish the rest of the rounds </strong> (so choosing the extinction option will not save you any time).
         </p>
         <p>
-        During the experiment, you will always see your <strong>current bonus</strong> on the top right. The current trial number is on the top left, and the two lotteries are in the middle.
+        During the experiment, you will always see your <strong>current bonus</strong> on the top right. The current round number is on the top left, and the two lotteries are in the middle.
     </p>
         <p>
         See below a picture of the display.
@@ -47,9 +47,17 @@
         <div class="col-md-12">
         
         {% if player.participant.condition == "indy" %}
-        <img src="{{ static 'resources/Instructions.png' }}" class="img-responsive img-instructions" alt="Decision Instructions"">
+            {% if player.participant.switched %}
+            <img src="{{ static 'resources/instructions-individual-switched.png' }}" class="img-responsive img-instructions" alt="Decision Instructions"">
+            {% else %}
+            <img src="{{ static 'resources/instructions-individual.png' }}" class="img-responsive img-instructions" alt="Decision Instructions"">
+            {% endif %}            
         {% else %}
-        <img src="{{ static 'resources/GroupInstructions1.png' }}" class="img-responsive img-instructions" alt="Decision Instructions"">
+            {% if player.participant.switched %}
+            <img src="{{ static 'resources/instructions-group-switched.png' }}" class="img-responsive img-instructions" alt="Decision Instructions"">
+            {% else %}
+            <img src="{{ static 'resources/instructions-group.png' }}" class="img-responsive img-instructions" alt="Decision Instructions"">
+            {% endif %} 
         {% endif %}
 
         </div>

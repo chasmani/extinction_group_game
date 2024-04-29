@@ -13,17 +13,17 @@
     <h4>Your Outcome</h4>
     {% if player.participant.last_result == '0' %}
         <div class="alert alert-secondary" role="alert">
-            +£0.00
+            +0p
         </div>
 
     {% elif player.participant.last_result == '1' %}
         <div class="alert alert-success" role="alert">
-            +£0.01
+            +1p
         </div>
 
     {% elif player.participant.last_result == '10' %}
         <div class="alert alert-success" role="alert">
-            +£0.10
+            +10p
         </div>
 
     {% elif player.participant.last_result == 'extinction' %}
@@ -34,7 +34,7 @@
 
     {% if player.participant.extinct %}
         <div class="alert alert-danger" role="alert">
-            <p><strong>You are extinct!</strong> You will still need to continue playing the remaining trials.
+            <p><strong>You are extinct!</strong> You will still need to continue playing the remaining rounds to get the base payment.
             However, you will not earn any bonus.</p>
         </div>
     {% endif %}
@@ -57,13 +57,13 @@
         <p>Your result this round: 
             {% if player.participant.last_result == '0' %}
         
-            +£0.00
+            +0p
         
     {% elif player.participant.last_result == '1' %}
-            +£0.01
+            +1p
         
     {% elif player.participant.last_result == '10' %}
-            +£0.10
+            +10p
         
     {% elif player.participant.last_result == 'extinction' %}
             Extinction! One or more of your group drew the extinction outcome!

@@ -60,15 +60,15 @@ PARTICIPANT_FIELDS = [
     "practice_payoff", 
     "practice_extinct",
     "game_payoff",
-    "game_extinct"
-    ]
-
-PARTICIPANT_FIELDS = [
+    "game_extinct",
     "last_result",
     "current_bonus",
     "extinct",
     "condition",
     "information",
+    "wrong_answers",
+    "exclusion",
+    "switched"
 ]
 
 SESSION_FIELDS = []
