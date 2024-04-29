@@ -16,7 +16,7 @@
         <div class="col-md-6">
             {% if player.round_number > 1 %}
             
-                {% if player.participant.extinct %}
+                {% if player.participant.game_extinct %}
                     <div class="alert alert-danger" role="alert">
                         <p><strong>You are extinct!</strong> You will still need to continue playing the remaining rounds to get the base payment.
                         However, you will not earn the bonus.</p>
@@ -30,12 +30,12 @@
             {% if player.round_number == 1 %}
                 <h4>Your Current Bonus</h4>
                 <h2>0p</h2>
-            {% elif player.participant.extinct %}
+            {% elif player.participant.game_extinct %}
                 <h4 class="extinct-text">You Are Extinct</h4>
                 <h2 class="extinct-text">0p</h2>
             {% else %}
                 <h4>Your Current Bonus</h4>
-                <h2>{{ player.participant.current_bonus }}p</h2>
+                <h2>{{ player.participant.game_current_bonus }}p</h2>
             {% endif %}
 
             </div>

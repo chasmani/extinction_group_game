@@ -7,9 +7,9 @@ Your app description
 """
 
 class C(BaseConstants):
-    NAME_IN_URL = 'practice'
+    NAME_IN_URL = 'practice_group'
     PLAYERS_PER_GROUP = None
-    NUM_ROUNDS = 20
+    NUM_ROUNDS = 4
 
 class Subsession(BaseSubsession):
     pass
@@ -36,7 +36,6 @@ class Player(BasePlayer):
     condition_choice = models.StringField(
         label="Please choose the condition you would like to play in.",
         choices=[
-            ['indy', 'Independent'],
             ['group', 'Group with Independent Choices'],
             ['voting', 'Group with Median Voting'],
         ],
@@ -58,48 +57,11 @@ class ConditionChoice(Page):
     form_fields = ["condition_choice", "lottery_switch_choice"]
 
     def is_displayed(player):
-        return player.round_number == 1
+        return player.round_number == 1 and "condition" not in player.participant.vars
 
     def before_next_page(player, timeout_happened):
         player.participant.vars['condition'] = player.condition_choice
         player.participant.vars["switched"] = player.lottery_switch_choice == 'switched'
-
-class IndyDecision(Page):
-
-    form_model = 'player'
-    form_fields = ['lottery_decision']
-
-    def is_displayed(player):
-        return player.participant.condition == 'indy'
-
-    def before_next_page(player, timeout_happened):
-        print(player, timeout_happened)
-
-        random_roll = random.random()
-
-        if player.round_number == 1:
-            player.participant.vars['current_bonus'] = 0
-            player.participant.vars['extinct'] = False
-
-        if player.participant.extinct:
-            player.participant.vars['last_result'] = "0"
-        else:
-            if player.lottery_decision == 'safe':
-                if random_roll < 0.5:
-                    player.participant.vars['last_result'] = "0"
-                else:
-                    player.participant.vars['last_result'] = "1"
-                    player.participant.vars['current_bonus'] += 1
-
-            if player.lottery_decision == 'risky':
-                if random_roll < 0.475:
-                    player.participant.vars['last_result'] = "0"
-                elif random_roll < 0.95:
-                    player.participant.vars['last_result'] = "10"
-                    player.participant.vars['current_bonus'] += 10
-                else:
-                    player.participant.vars['last_result'] = "extinction"
-                    player.participant.vars['extinct'] = True
 
 class GroupDecision(Page):
 
@@ -202,14 +164,14 @@ class VotingResult(Page):
                     player.participant.vars['last_result'] = "0"
                 else:
                     player.participant.vars['last_result'] = "1"
-                    player.participant.vars['current_bonus'] += 0.01
+                    player.participant.vars['current_bonus'] += 1
 
             if player.lottery_decision == 'risky':
                 if random_roll < 0.475:
                     player.participant.vars['last_result'] = "0"
                 elif random_roll < 0.95:
                     player.participant.vars['last_result'] = "10"
-                    player.participant.vars['current_bonus'] += 0.1
+                    player.participant.vars['current_bonus'] += 10
                 else:
                     player.participant.vars['last_result'] = "extinction"
                     player.participant.vars['extinct'] = True
@@ -234,8 +196,7 @@ class VotingResult(Page):
             'safe_count': safe_count,
         }
 
-page_sequence = [ConditionChoice, 
-                 IndyDecision, 
+page_sequence = [ConditionChoice,
                  GroupDecision,
                  GroupResult,
                  VotingDecision,

@@ -26,11 +26,22 @@
             +10p
         </div>
 
-    {% elif player.participant.last_result == 'extinction' %}
+        
+    {% endif %}
+
+    {% if player.participant.last_result == 'extinction' %}
         <div class="alert alert-danger" role="alert">
             Extinction! One or more of your group drew the extinction outcome!
         </div>
+
+    {% else %}
+        {% if not player.participant.extinct %}
+        <div class="alert alert-success" role="alert">
+            None of your group drew the extinction outcome.
+        </div>
+        {% endif %}
     {% endif %}
+    
 
     {% if player.participant.extinct %}
         <div class="alert alert-danger" role="alert">

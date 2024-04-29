@@ -23,9 +23,9 @@ def creating_session(subsession):
                 player.participant.condition = "indy"
 
 class C(BaseConstants):
-    NAME_IN_URL = 'game'
+    NAME_IN_URL = 'practice'
     PLAYERS_PER_GROUP = None
-    NUM_ROUNDS = 100
+    NUM_ROUNDS = 20
 
 class Subsession(BaseSubsession):
     pass

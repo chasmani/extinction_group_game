@@ -12,13 +12,13 @@ SESSION_CONFIGS = [
         num_demo_participants=5,
     ),
     dict(
-        name='practice',
-        app_sequence=['practice'],
+        name='practice_individual',
+        app_sequence=['practice_indy'],
         num_demo_participants=5,
     ),
     dict(
-        name='information',
-        app_sequence=['information'],
+        name='practice_group',
+        app_sequence=['practice_group'],
         num_demo_participants=5,
     ),
     dict(
@@ -37,15 +37,10 @@ SESSION_CONFIGS = [
         num_demo_participants=5,
     ),
     dict(
-        name='full_experiment_individual',
-        app_sequence=['consent', 'instructions', 'practice', 'information', 'game_indy', 'payment'],
-        num_demo_participants=5,
-    ),
-    dict(
-        name='full_experiment_group',
-        app_sequence=['consent', 'instructions', 'practice', 'information', 'game_group', 'payment'],
-        num_demo_participants=5,
-    ),
+        name="full_experiment",
+        app_sequence=['consent', 'instructions', 'practice_indy', 'practice_group', 'game_indy', 'game_group', 'payment'],
+        num_demo_participants=10,
+    )
 ]
 
 # if you set a property in SESSION_CONFIG_DEFAULTS, it will be inherited by all configs
@@ -57,18 +52,23 @@ SESSION_CONFIG_DEFAULTS = dict(
     real_world_currency_per_point=1.00, participation_fee=0.00, doc=""
 )
 PARTICIPANT_FIELDS = [
-    "practice_payoff", 
-    "practice_extinct",
-    "game_payoff",
+    "extinct",
+    "current_bonus",
+    "game_current_bonus",
     "game_extinct",
     "last_result",
-    "current_bonus",
     "extinct",
     "condition",
     "information",
     "wrong_answers",
     "exclusion",
-    "switched"
+    "is_dropout",
+    "switched",
+    "current_group_bonus",
+    "unique_group_id",
+    "wait_page_arrival",
+    "risky_count",
+    "player_votes"
 ]
 
 SESSION_FIELDS = []

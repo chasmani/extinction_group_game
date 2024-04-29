@@ -111,6 +111,9 @@ class ConditionChoice(Page):
     form_model = "player"
     form_fields = ["condition_choice", "lottery_switch_choice"]
 
+    def is_displayed(player):
+        return "condition" not in player.participant.vars
+
     def before_next_page(player, timeout_happened):
         player.participant.vars['condition'] = player.condition_choice
         player.participant.vars["switched"] = player.lottery_switch_choice == 'switched'
