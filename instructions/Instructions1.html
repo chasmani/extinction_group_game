@@ -17,12 +17,7 @@
         <p>
         In this experiment, you can get a bonus payment on top of your regular payment. This bonus will depend on your answers to a series of gambles. In each round, you will need to decide between a "safe" and a "risky" lottery. Each lottery has different reward outcomes with different probabilities of each outcome occurring.
     </p>
-    {% if player.participant.condition == "indy" %}
-        <p><strong>You will play a total of 100 rounds</strong></p>
-    {% else %}
-        <p><strong>You will play a total of 20 rounds</strong></p>
-    {% endif %}
-
+    
         <p>Safe Lottery:</p>
 
         <ul>
@@ -40,6 +35,13 @@
         <p>
         If the <strong>extinction</strong> outcome is drawn, your bonus payment for the whole experiment will be wiped out, and you cannot get any more bonus payments for future rounds. In other words, even if the extinction outcome is drawn only once during the study, <strong>you will receive no bonus payment at all at the end of the study. However, you will still need to finish the rest of the rounds </strong> (so choosing the extinction option will not save you any time).
         </p>
+
+        <h2>Rounds</h2>
+        {% if player.participant.condition == "indy" %}
+            <p><strong>You will play a total of 100 rounds.</strong></p>
+        {% else %}
+            <p><strong>You will play a total of 20 rounds.</strong></p>
+        {% endif %}
         
     </div>
     </div>

@@ -7,7 +7,15 @@
 {{ endblock }}
 {{ block content }}
 
- <p>To familiarise yourself with the task you begin with 20 practice rounds. The practice rounds are identical to the actual rounds later, but you will not accumulate any bonus (i.e., drawing the extinction event during the practice rounds does not preclude you from earning a bonus in the actual rounds).</p>
+ <p>To familiarise yourself with the task you begin with 
+    
+    {% if player.participant.condition == "indy" %}
+        20 
+        {% else %}
+        4
+    {% endif %}
+    
+    practice rounds. The practice rounds are identical to the actual rounds later, but you will not accumulate any bonus (i.e., drawing the extinction event during the practice rounds does not preclude you from earning a bonus in the actual rounds).</p>
 
 <p> Please click continue to start the practice rounds.</p>
 
