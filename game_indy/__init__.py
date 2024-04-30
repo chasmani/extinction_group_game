@@ -21,6 +21,7 @@ def creating_session(subsession):
             for player in players:
 
                 player.participant.condition = "indy"
+                player.participant.switched = random.choice([True, False])
 
 class C(BaseConstants):
     NAME_IN_URL = 'game'

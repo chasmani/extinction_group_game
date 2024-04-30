@@ -2,26 +2,6 @@ from os import environ
 
 SESSION_CONFIGS = [
     dict(
-        name='consent',
-        app_sequence=['consent'],
-        num_demo_participants=5,
-    ),
-    dict(
-        name='instructions',
-        app_sequence=['instructions'],
-        num_demo_participants=5,
-    ),
-    dict(
-        name='practice_individual',
-        app_sequence=['practice_indy'],
-        num_demo_participants=5,
-    ),
-    dict(
-        name='practice_group',
-        app_sequence=['practice_group'],
-        num_demo_participants=10,
-    ),
-    dict(
         name='game_individual',
         app_sequence=['game_indy'],
         num_demo_participants=5,
@@ -30,11 +10,6 @@ SESSION_CONFIGS = [
         name='game_group',
         app_sequence=['game_group'],
         num_demo_participants=10,
-    ),
-    dict(
-        name='payment',
-        app_sequence=['payment'],
-        num_demo_participants=5,
     ),
     dict(
         name="full_experiment",

@@ -293,8 +293,8 @@ def get_results(group):
 
     # If it's a one person group then simulate some outcomes
     if len(players) == 1:
-        players = players[0]
-        if player.participant.lottery_action == 'safe':
+        player = players[0]
+        if player.lottery_action == 'safe':
             other_risky_count = risky_count
         else:
             other_risky_count = risky_count - 1
