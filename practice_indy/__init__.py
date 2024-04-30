@@ -15,11 +15,10 @@ def creating_session(subsession):
         # For the full experiment, wait_page_arrival is set in previous app
         # For testing
 
-        if subsession.session.config["name"] == "game_individual":
+        if subsession.session.config["name"] == "practice_individual":
             
             players = subsession.get_players()
             for player in players:
-
                 player.participant.condition = "indy"
 
 class C(BaseConstants):
@@ -77,10 +76,10 @@ class IndyDecision(Page):
         random_roll = random.random()
 
         if player.round_number == 1:
-            player.participant.vars['current_bonus'] = 0
-            player.participant.vars['extinct'] = False
+            player.participant.practice_current_bonus = 0
+            player.participant.practice_extinct = False
 
-        if player.participant.extinct:
+        if player.participant.practice_extinct:
             player.participant.vars['last_result'] = "0"
         else:
             if player.lottery_decision == 'safe':
@@ -88,18 +87,18 @@ class IndyDecision(Page):
                     player.participant.vars['last_result'] = "0"
                 else:
                     player.participant.vars['last_result'] = "1"
-                    player.participant.vars['current_bonus'] += 1
+                    player.participant.practice_current_bonus += 1
 
             if player.lottery_decision == 'risky':
                 if random_roll < 0.475:
                     player.participant.vars['last_result'] = "0"
                 elif random_roll < 0.95:
                     player.participant.vars['last_result'] = "10"
-                    player.participant.vars['current_bonus'] += 10
-                    print(player.participant.vars['current_bonus'])
+                    player.participant.practice_current_bonus += 10
+                    
                 else:
                     player.participant.vars['last_result'] = "extinction"
-                    player.participant.vars['extinct'] = True
+                    player.participant.practice_extinct = True
 
 
 page_sequence = [ConditionChoice, IndyDecision]

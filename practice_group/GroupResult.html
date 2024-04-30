@@ -36,7 +36,7 @@
     </div>
 
     {% else %}
-        {% if not player.participant.extinct %}
+        {% if not player.participant.practice_extinct %}
         <div class="alert alert-success" role="alert">
             None of your group drew the extinction outcome.
         </div>
@@ -45,7 +45,7 @@
 
 
 
-    {% if player.participant.extinct %}
+    {% if player.participant.practice_extinct %}
         <div class="alert alert-danger" role="alert">
             <p><strong>You are extinct!</strong> You will still need to continue playing the remaining rounds to get the base payment.
             However, you will not earn any bonus.</p>

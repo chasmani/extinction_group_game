@@ -88,6 +88,7 @@ class ParticipantConsent(Page):
 			player.participant.vars["switched"] = False
 
 		player.participant.wrong_answers = []
+		player.participant.is_dropout = False
 
 
 page_sequence = [Welcome,

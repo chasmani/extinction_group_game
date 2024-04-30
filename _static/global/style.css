@@ -21,3 +21,11 @@
     opacity: 1;
     transition: opacity 1s ease-in-out;
 }
+
+.margin-h2 {
+    margin-top: 20px;
+}
+
+.group-info {
+    color: #aaa;
+}

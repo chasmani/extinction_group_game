@@ -2,7 +2,7 @@
 {% load otree %}
 
 {{ block title }}
-  Information and Consent
+  Instructions
 {{ endblock }}
 {{ block content }}
 
@@ -17,6 +17,11 @@
         <p>
         In this experiment, you can get a bonus payment on top of your regular payment. This bonus will depend on your answers to a series of gambles. In each round, you will need to decide between a "safe" and a "risky" lottery. Each lottery has different reward outcomes with different probabilities of each outcome occurring.
     </p>
+    {% if player.participant.condition == "indy" %}
+        <p><strong>You will play a total of 100 rounds</strong></p>
+    {% else %}
+        <p><strong>You will play a total of 20 rounds</strong></p>
+    {% endif %}
 
         <p>Safe Lottery:</p>
 
@@ -33,35 +38,12 @@
             <li>5% chance of <strong>extinction</strong></li>
         </ul>
         <p>
-        If you draw the <strong>extinction</strong> outcome, your bonus payment for the whole experiment will be wiped out, and you cannot get any more bonus payments for future rounds. In other words, even if you draw the extinction outcome only once during the study, <strong>you will receive no bonus payment at all at the end of the study. However, you will still need to finish the rest of the rounds </strong> (so choosing the extinction option will not save you any time).
+        If the <strong>extinction</strong> outcome is drawn, your bonus payment for the whole experiment will be wiped out, and you cannot get any more bonus payments for future rounds. In other words, even if the extinction outcome is drawn only once during the study, <strong>you will receive no bonus payment at all at the end of the study. However, you will still need to finish the rest of the rounds </strong> (so choosing the extinction option will not save you any time).
         </p>
-        <p>
-        During the experiment, you will always see your <strong>current bonus</strong> on the top right. The current round number is on the top left, and the two lotteries are in the middle.
-    </p>
-        <p>
-        See below a picture of the display.
-    </p>
-    </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
         
-        {% if player.participant.condition == "indy" %}
-            {% if player.participant.switched %}
-            <img src="{{ static 'resources/instructions-individual-switched.png' }}" class="img-responsive img-instructions" alt="Decision Instructions"">
-            {% else %}
-            <img src="{{ static 'resources/instructions-individual.png' }}" class="img-responsive img-instructions" alt="Decision Instructions"">
-            {% endif %}            
-        {% else %}
-            {% if player.participant.switched %}
-            <img src="{{ static 'resources/instructions-group-switched.png' }}" class="img-responsive img-instructions" alt="Decision Instructions"">
-            {% else %}
-            <img src="{{ static 'resources/instructions-group.png' }}" class="img-responsive img-instructions" alt="Decision Instructions"">
-            {% endif %} 
-        {% endif %}
-
-        </div>
-        </div>
+    </div>
+    </div>
+   
 
         <div class="row">
         <div class="col-md-8 offset-md-2">

@@ -32,6 +32,18 @@ class Player(BasePlayer):
         initial=''
     )
 
+    quiz_total_rounds = models.StringField(
+        label="How many rounds will you play in the experiment?",
+        choices=[
+            ['total_10', '10 rounds.'],
+            ['total_20', '20 rounds.'],
+            ['total_50', '50 rounds.'],
+            ['total_100', '100 rounds.'],
+        ],
+        widget=widgets.RadioSelect,
+        initial=''
+    )
+
     quiz_group_extinction = models.StringField(
         label="What happens if one of the players draws the extinction outcome in the risky lottery?",
         choices=[
@@ -47,7 +59,7 @@ class Player(BasePlayer):
     quiz_voting = models.StringField(
         label="How is the group decision made for how many players will play the risky lottery?",
         choices=[
-            ['voting_median', 'The group decision is the middle value of the choices.'],
+            ['voting_median', 'The group decision is the middle value of the ordered votes.'],
             ['voting_random', 'The group decision is randomly chosen.'],
             ['voting_leader', 'The group decision is the choice of the leader.'],
             ['voting_all', 'All players must choose the same option.'],
@@ -92,6 +104,17 @@ def quiz_extinction_error_message(player, value):
         player.participant.wrong_answers.append('quiz_extinction')
         return 'That is not correct. Please try again.'
 
+def quiz_total_rounds_error_message(player, value):
+    if player.participant.condition == "indy":
+        if value != 'total_100':
+            player.participant.wrong_answers.append('quiz_total_rounds')
+            return 'That is not correct. Please try again.'
+    else:
+        if value != 'total_20':
+            player.participant.wrong_answers.append('quiz_total_rounds')
+            return 'That is not correct. Please try again.'    
+    
+
 def quiz_group_extinction_error_message(player, value):
     if value != 'extinct_all':
         player.participant.wrong_answers.append('quiz_group_extinction')
@@ -121,8 +144,7 @@ class ConditionChoice(Page):
 
 class Instructions1(Page):
     form_model = "player"
-    form_fields = ["quiz_extinction", "attention_check"]
-
+    form_fields = ["quiz_extinction", "quiz_total_rounds", "attention_check"]
 
 class GroupInstructions2(Page):
     form_model = "player"
@@ -139,11 +161,16 @@ class VoterInstructions2(Page):
     def is_displayed(player):
         return player.participant.condition == 'voting'
 
+class Screenshot(Page):
+    pass
+
 class PracticeGetReady(Page):
     pass
+
 
 page_sequence = [ConditionChoice,
                  Instructions1,
                  GroupInstructions2,
                  VoterInstructions2,
+                 Screenshot,
                  PracticeGetReady]

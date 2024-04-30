@@ -4,45 +4,55 @@
 {{ block content }}
 
 <div>
-<div class="row text-center">
-    <div class="col-md-3 round-number">
-        
-        <div>
-
-                <h4>Round Number</h4>
-                <h2>{{ player.round_number }} of {{ C.NUM_ROUNDS }}</h2>
-            </div>
-        </div>
-        <div class="col-md-6">
-            {% if player.round_number > 1 %}
+    <div class="row text-center">
+        <div class="col-md-3 round-number">
             
-                {% if player.participant.game_extinct %}
-                    <div class="alert alert-danger" role="alert">
-                        <p><strong>You are extinct!</strong> You will still need to continue playing the remaining rounds to get the base payment.
-                        However, you will not earn the bonus.</p>
-                    </div>
-                {% endif %}
-            {% endif %}
-        </div>
-        <div class="col-md-3 bonus">
             <div>
-
-            {% if player.round_number == 1 %}
-                <h4>Your Current Bonus</h4>
-                <h2>0p</h2>
-            {% elif player.participant.game_extinct %}
-                <h4 class="extinct-text">You Are Extinct</h4>
-                <h2 class="extinct-text">0p</h2>
-            {% else %}
-                <h4>Your Current Bonus</h4>
-                <h2>{{ player.participant.game_current_bonus }}p</h2>
-            {% endif %}
-
+    
+                    <h4>Round Number</h4>
+                    <h2>{{ player.round_number }} of {{ C.NUM_ROUNDS }}</h2>
+                </div>
             </div>
+                {% if player.round_number > 1 and player.participant.game_extinct %}
+                <div class="col-md-6">
+                        <div class="alert alert-danger" role="alert">
+                            <p><strong>You are extinct!</strong> You will still need to continue playing the remaining rounds to get the base payment.
+                            However, you will not earn the bonus.</p>
+                        </div>
+                    </div>
+                {% else %}
+                <div class="col-md-3 group-info">
+                    {% if player.participant.information == "optimal" %}
+                    <div>
+                        <h4>Optimal Strategy</h4>
+                        <p class="margin-h2">{{ optimal_n_risky }} total risky lotteries for the group over the entire game.</p>
+                    </div>
+                    {% endif %}
+                    
+                </div>
+                <div class="col-md-3 group-info">
+                    <div>
+                        <h4>Group Current Bonus</h4>
+                        <h2>{{ player.participant.game_current_group_bonus }}p</h2>
+                    </div>
+                </div>
+                {% endif %}
+                
+            <div class="col-md-3 bonus">
+                <div>
+    
+                {% if player.participant.game_extinct %}
+                    <h4 class="extinct-text">You Are Extinct</h4>
+                {% else %}
+                    <h4>Your Current Bonus</h4>
+                {% endif %}
+                <h2>{{ player.participant.game_current_bonus }}p</h2>
+    
+                </div>
+            </div>
+            
         </div>
-        
     </div>
-</div>
 
 </div>
 <div>

@@ -19,7 +19,7 @@ SESSION_CONFIGS = [
     dict(
         name='practice_group',
         app_sequence=['practice_group'],
-        num_demo_participants=5,
+        num_demo_participants=10,
     ),
     dict(
         name='game_individual',
@@ -29,7 +29,7 @@ SESSION_CONFIGS = [
     dict(
         name='game_group',
         app_sequence=['game_group'],
-        num_demo_participants=5,
+        num_demo_participants=10,
     ),
     dict(
         name='payment',
@@ -52,23 +52,23 @@ SESSION_CONFIG_DEFAULTS = dict(
     real_world_currency_per_point=1.00, participation_fee=0.00, doc=""
 )
 PARTICIPANT_FIELDS = [
-    "extinct",
-    "current_bonus",
+    "practice_extinct",
+    "practice_current_bonus",
     "game_current_bonus",
     "game_extinct",
+    "practice_current_group_bonus",
+    "game_current_group_bonus",
     "last_result",
-    "extinct",
     "condition",
     "information",
     "wrong_answers",
     "exclusion",
     "is_dropout",
     "switched",
-    "current_group_bonus",
     "unique_group_id",
     "wait_page_arrival",
     "risky_count",
-    "player_votes"
+    "player_votes" 
 ]
 
 SESSION_FIELDS = []

@@ -77,10 +77,10 @@ class IndyDecision(Page):
         random_roll = random.random()
 
         if player.round_number == 1:
-            player.participant.vars['current_bonus'] = 0
-            player.participant.vars['extinct'] = False
+            player.participant.game_current_bonus = 0
+            player.participant.game_extinct = False
 
-        if player.participant.extinct:
+        if player.participant.game_extinct:
             player.participant.vars['last_result'] = "0"
         else:
             if player.lottery_decision == 'safe':
@@ -88,18 +88,21 @@ class IndyDecision(Page):
                     player.participant.vars['last_result'] = "0"
                 else:
                     player.participant.vars['last_result'] = "1"
-                    player.participant.vars['current_bonus'] += 1
+                    player.participant.game_current_bonus += 1
 
             if player.lottery_decision == 'risky':
                 if random_roll < 0.475:
                     player.participant.vars['last_result'] = "0"
                 elif random_roll < 0.95:
                     player.participant.vars['last_result'] = "10"
-                    player.participant.vars['current_bonus'] += 10
-                    print(player.participant.vars['current_bonus'])
+                    player.participant.game_current_bonus += 10
+
                 else:
                     player.participant.vars['last_result'] = "extinction"
-                    player.participant.vars['extinct'] = True
+                    player.participant.game_extinct = True
 
+class GetReady(Page):
+    def is_displayed(player):
+        return player.round_number == 1
 
-page_sequence = [ConditionChoice, IndyDecision]
+page_sequence = [GetReady, ConditionChoice, IndyDecision]

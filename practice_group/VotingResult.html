@@ -35,7 +35,7 @@
         </div>
 
     {% else %}
-        {% if not player.participant.extinct %}
+        {% if not player.participant.practice_extinct %}
         <div class="alert alert-success" role="alert">
             None of your group drew the extinction outcome.
         </div>
@@ -43,7 +43,7 @@
     {% endif %}
     
 
-    {% if player.participant.extinct %}
+    {% if player.participant.practice_extinct %}
         <div class="alert alert-danger" role="alert">
             <p><strong>You are extinct!</strong> You will still need to continue playing the remaining rounds to get the base payment.
             However, you will not earn any bonus.</p>
@@ -59,7 +59,7 @@
         <li>Risky lottery count: {{ risky_count }} </li>
         <li>Safe lottery count: {{ safe_count }} </li>
     </ul>   
-    {% if player.lottery_decision == "risky" %}
+    {% if player.lottery_action == "risky" %}
             <p>You were selected to play the risky lottery.</p>
     {% else %}
             <p>You were selected to play the safe lottery.</p>

@@ -1,0 +1,49 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{{ block title }}
+  The Game Screen
+{{ endblock }}
+{{ block content }}
+
+
+  <div class="row">
+    <div class="col-md-8 offset-md-2">
+        
+        <p>During the experiment, you will always see your current bonus on the top right. The current round number is in the top left, and the two lotteries are in the middle.</p>
+        <p>See below a picture of the display.</p>
+
+    </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+        
+        {% if player.participant.condition == "indy" %}
+            {% if player.participant.switched %}
+            <img src="{{ static 'resources/instructions-individual-switched.png' }}" class="img-responsive img-instructions" alt="Decision Instructions"">
+            {% else %}
+            <img src="{{ static 'resources/instructions-individual.png' }}" class="img-responsive img-instructions" alt="Decision Instructions"">
+            {% endif %}            
+        {% else %}
+            {% if player.participant.switched %}
+            <img src="{{ static 'resources/instructions-group-switched.png' }}" class="img-responsive img-instructions" alt="Decision Instructions"">
+            {% else %}
+            <img src="{{ static 'resources/instructions-group.png' }}" class="img-responsive img-instructions" alt="Decision Instructions"">
+            {% endif %} 
+        {% endif %}
+
+        </div>
+        </div>
+
+        <div class="row">
+        <div class="col-md-8 offset-md-2">
+
+
+{{ next_button }}
+
+
+    </div>
+  </div>
+
+
+{{ endblock }}
