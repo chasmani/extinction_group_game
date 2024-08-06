@@ -36,6 +36,9 @@ class C(BaseConstants):
     NAME_IN_URL = 'game_group'
     PLAYERS_PER_GROUP = None
     NUM_ROUNDS = 20
+    TIMEOUT_GROUPING = 1
+    TIMEOUT_CHOICE = 60
+    TIMEOUT_INFO = 30
 
 class Subsession(BaseSubsession):
     pass
@@ -111,7 +114,7 @@ def group_by_arrival_time_method(self, waiting_players):
             return [player]
 
 def waiting_too_long(player):
-    return time.time() - player.participant.wait_page_arrival > 60
+    return time.time() - player.participant.wait_page_arrival > C.TIMEOUT_GROUPING
 
 def set_game_vars(group):
     for player in group.get_players():
@@ -132,14 +135,14 @@ class GroupWaitPage(WaitPage):
     def is_displayed(player):
         return player.round_number == 1 and player.participant.condition in ['group', 'voting']
 
-def expected_value_strategy(n_risky, p_survive=0.95, e_risky=5, e_safe = 0.5, n_rounds=100):
+def expected_value_strategy(n_risky, endowment = 0, p_survive=0.95, e_risky=5, e_safe = 0.5, n_rounds=100):
 
-    return p_survive**n_risky * (e_risky * n_risky + e_safe * (n_rounds - n_risky))
+    return p_survive**n_risky * (endowment + e_risky * n_risky + e_safe * (n_rounds - n_risky))
 
 
 class OptimalChoices(Page):
     
-    timeout_seconds = 240
+    timeout_seconds = C.TIMEOUT_CHOICE * 2
 
     def is_displayed(player):
         return player.round_number == 1 and player.participant.vars['condition'] != 'indy' and player.participant.vars['information'] == 'optimal'
@@ -163,7 +166,7 @@ class OptimalChoices(Page):
 
 class GetReady(Page):
 
-    timeout_seconds = 30
+    timeout_seconds = C.TIMEOUT_INFO
     
     def is_displayed(player):
         return player.round_number == 1 and player.participant.vars['condition'] != 'indy'
@@ -172,7 +175,7 @@ class GroupDecision(Page):
 
     form_model = 'player'
     form_fields = ['lottery_action']
-    timeout_seconds = 60
+    timeout_seconds = C.TIMEOUT_CHOICE
     
     def is_displayed(player):
         return player.participant.condition == 'group' and not player.participant.is_dropout
@@ -183,14 +186,15 @@ class GroupDecision(Page):
 
     def vars_for_template(player):
         return {
-            'optimal_n_risky': 8
+            'optimal_n_risky': 8,
+            'optimal_n_risky_per_player': 8/5
         }
 
 class VotingDecision(Page):
 
     form_model = 'player'
     form_fields = ['voter_decision']
-    timeout_seconds = 60
+    timeout_seconds = C.TIMEOUT_CHOICE
     
     def is_displayed(player):
         return player.participant.condition == 'voting' and not player.participant.is_dropout
@@ -201,7 +205,8 @@ class VotingDecision(Page):
 
     def vars_for_template(player):
         return {
-            'optimal_n_risky': 8
+            'optimal_n_risky': 8,
+            'optimal_n_risky_per_player': 8/5
         }
 
 def get_results(group):
@@ -303,20 +308,20 @@ def get_results(group):
         for _ in range(other_risky_count):
             random_roll_a = random.random()
             if random_roll_a < 0.5:
-                player.participant.practice_current_group_bonus += 10
+                player.participant.game_current_group_bonus += 10
 
         for _ in range(5-other_risky_count):
             random_roll_a = random.random()
             if random_roll_a < 0.5:
-                player.participant.practice_current_group_bonus += 1
+                player.participant.game_current_group_bonus += 1
 
         # Group extinction
         random_roll = random.random()
         if random_roll > (0.95**other_risky_count):
             player.participant.vars['last_result'] = "extinction"
-            player.participant.practice_current_bonus = 0
-            player.participant.practice_current_group_bonus = 0
-            player.participant.practice_extinct = True
+            player.participant.game_current_bonus = 0
+            player.participant.game_current_group_bonus = 0
+            player.participant.game_extinct = True
 
 
 class ResultsWaitPage(WaitPage):   
@@ -329,7 +334,7 @@ class ResultsWaitPage(WaitPage):
 
 class GroupResult(Page):
 
-    timeout_seconds = 30
+    timeout_seconds = C.TIMEOUT_INFO
 
     def is_displayed(player):
         return player.participant.condition == 'group' and not player.participant.is_dropout
@@ -347,7 +352,7 @@ class GroupResult(Page):
 
 class VotingResult(Page):
 
-    timeout_seconds = 30
+    timeout_seconds = C.TIMEOUT_INFO
     
     def is_displayed(player):
         return player.participant.condition == 'voting' and not player.participant.is_dropout

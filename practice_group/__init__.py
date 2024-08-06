@@ -102,10 +102,9 @@ class GroupWaitPage(WaitPage):
     def is_displayed(player):
         return player.round_number == 1 and player.participant.condition in ['group', 'voting']
 
-def expected_value_strategy(n_risky, p_survive=0.95, e_risky=5, e_safe = 0.5, n_rounds=100):
+def expected_value_strategy(n_risky, endowment=0, p_survive=0.95, e_risky=5, e_safe = 0.5, n_rounds=100):
 
-    return p_survive**n_risky * (e_risky * n_risky + e_safe * (n_rounds - n_risky))
-
+    return p_survive**n_risky * (endowment + e_risky * n_risky + e_safe * (n_rounds - n_risky))
 
 class OptimalChoices(Page):
     
@@ -209,7 +208,6 @@ def get_results(group):
     if not player.participant.practice_extinct:
         player.participant.risky_count = risky_count
         
-
         if player.lottery_action == 'safe':
             other_risky_count = risky_count
             random_roll = random.random()

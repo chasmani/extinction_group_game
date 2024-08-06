@@ -22,13 +22,7 @@
                     </div>
                 {% else %}
                 <div class="col-md-3 group-info">
-                    {% if player.participant.information == "optimal" %}
-                    <div>
-                        <h4>Optimal Strategy</h4>
-                        <p class="margin-h2">{{ optimal_n_risky }} total risky lotteries for the group over the entire game.</p>
-                    </div>
-                    {% endif %}
-                    
+                     
                 </div>
                 <div class="col-md-3 group-info">
                     <div>
@@ -67,9 +61,29 @@
         </div>
     </div>
 
-<div class="row">
-    <div class="col-md-8 offset-md-2">
+
+        {% if player.participant.information == "optimal" %}
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+            
+                <h4>Optimal Strategy</h4>
+                <div class="col-md-4 optimal-info">
+            
+                    <p class="margin-h2"><h2>{{ optimal_n_risky }}</h2> total risky lotteries for the group over the rest of the game.</p>
+                </div>
+                <div class="col-md-4 optimal-info">
+            
+                <p class="margin-h2"><h2>{{ optimal_n_risky_per_player }}</h2> risky lotteries per player over the rest of the game.</p>
+                
+                </div>
+                </div>
+                </div>
+            
+        {% endif %}
+                   
         
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
         {{ formfields }}
 
         {{ next_button }}
