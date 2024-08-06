@@ -78,17 +78,7 @@ class Player(BasePlayer):
         widget=widgets.RadioSelect
     )
 
-    attention_check = models.StringField(
-        label="This is a question to check that you are paying attention, please select option 3",
-        choices=[
-            ['1', '1'],
-            ['2', '2'],
-            ['3', '3'],
-            ['4', '4'],
-        ],
-        widget=widgets.RadioSelect
-    )
-
+    
     lottery_switch_choice = models.StringField(
         label="Which way round do you want to see the lotteries?",
         choices=[
@@ -125,10 +115,6 @@ def quiz_voting_error_message(player, value):
         player.participant.wrong_answers.append('quiz_voting')
         return 'That is not correct. Please try again.'
 
-def attention_check_error_message(player, value):
-    if value != '3':
-        player.participant.wrong_answers.append('attention_check')
-        return 'That is not correct. Please try again.'
 
 class ConditionChoice(Page):
     form_model = "player"
@@ -144,7 +130,7 @@ class ConditionChoice(Page):
 
 class Instructions1(Page):
     form_model = "player"
-    form_fields = ["quiz_extinction", "quiz_total_rounds", "attention_check"]
+    form_fields = ["quiz_extinction", "quiz_total_rounds"]
 
 class GroupInstructions2(Page):
     form_model = "player"

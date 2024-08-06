@@ -7,6 +7,11 @@ SESSION_CONFIGS = [
         num_demo_participants=5,
     ),
     dict(
+        name='instuctions',
+        app_sequence=['instructions'],
+        num_demo_participants=5,
+    ),
+    dict(
         name='game_group',
         app_sequence=['game_group'],
         num_demo_participants=10,
