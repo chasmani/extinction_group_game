@@ -5,6 +5,8 @@ import time
 
 import numpy as np
 
+from game_group import get_results
+
 doc = """
 Your app description
 """
@@ -153,82 +155,7 @@ class VotingDecision(Page):
             'optimal_n_risky': 8
         }
 
-def get_results(group):
 
-    players = group.get_players()
-
-    player = players[0]
-
-    # Voting bit
-    if player.participant.condition == 'voting':
-        
-        player_votes = [random.randint(0, 5) for i in range(4)]
-        player_votes.append(player.voter_decision)
-
-        player_votes.sort()
-        player.participant.player_votes = player_votes
-        risky_count= player_votes[2]
-        safe_count = 5 - risky_count
-
-        prob_this_player_risky = 0.2*risky_count
-        random_roll_a = random.random()
-        if random_roll_a < prob_this_player_risky:
-            player.lottery_action = 'risky'
-        else:
-            player.lottery_action = 'safe'
-
-    # Group bit
-    if player.participant.condition == 'group':
-
-        risky_count = random.randint(0, 4)
-        if player.lottery_action == 'risky':
-            risky_count += 1
-        safe_count = 5 - risky_count
-
-    if not player.participant.game_extinct:
-        player.participant.risky_count = risky_count
-        
-        if player.lottery_action == 'safe':
-            other_risky_count = risky_count
-            random_roll = random.random()
-            if random_roll < 0.5:
-                player.participant.vars['last_result'] = "0"
-            else:
-                player.participant.vars['last_result'] = "1"
-                player.participant.vars['game_current_bonus'] += 1
-
-        if player.lottery_action == 'risky':
-            other_risky_count = risky_count - 1
-            random_roll = random.random()
-            if random_roll < 0.475:
-                player.participant.vars['last_result'] = "0"
-            elif random_roll < 0.95:
-                player.participant.vars['last_result'] = "10"
-                player.participant.vars['game_current_bonus'] += 10
-            else:
-                player.participant.vars['last_result'] = "extinction"
-                player.participant.vars['game_current_bonus'] = 0
-
-        # Sim other player outcomes
-        # Group payout outcomes
-        player.participant.game_current_group_bonus += player.participant.game_current_bonus
-        for _ in range(other_risky_count):
-            random_roll_a = random.random()
-            if random_roll_a < 0.5:
-                player.participant.game_current_group_bonus += 10
-
-        for _ in range(5-other_risky_count):
-            random_roll_a = random.random()
-            if random_roll_a < 0.5:
-                player.participant.game_current_group_bonus += 1
-
-        # Group extinction
-        random_roll = random.random()
-        if random_roll > (0.95**other_risky_count):
-            player.participant.vars['last_result'] = "extinction"
-            player.participant.game_current_bonus = 0
-            player.participant.game_current_group_bonus = 0
-            player.participant.game_extinct = True
 
 
 class ResultsWaitPage(WaitPage):   
