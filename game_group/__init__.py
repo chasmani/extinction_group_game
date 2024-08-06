@@ -209,120 +209,109 @@ class VotingDecision(Page):
             'optimal_n_risky_per_player': 8/5
         }
 
+
+def get_voting_result(group):
+
+    players = group.get_players()
+
+    player_votes = [player.field_maybe_none('voter_decision') for player in players]
+
+    while len(player_votes) < 5:
+        player_votes.append(np.random.randint(6))
+    # Replace any None
+    player_votes = [np.random.randint(6) if i is None else i for i in player_votes]
+    player_votes.sort()
+    risky_count = player_votes[2]
+
+    # Randomly choose player indices to play risky lottery
+    risky_player_indices = random.sample(range(5), risky_count)
+
+    # Get player actions
+    player_choices = []
+    for i in range(5):
+        if i in risky_player_indices:
+            player_choices.append('risky')
+        else:
+            player_choices.append('safe')
+
+    for i, player in enumerate(players):        
+        player.participant.player_votes = player_votes
+        player.participant.risky_count = risky_count
+        if i in risky_player_indices:
+            player.lottery_action = 'risky'
+        else:
+            player.lottery_action = 'safe'
+
+    return player_choices
+
 def get_results(group):
 
     players = group.get_players()
 
-    # Voting bit
+
+    # If voting
     if players[0].participant.condition == 'voting':
-        player_votes = [player.field_maybe_none('voter_decision') for player in players]
-        
+        player_choices = get_voting_result(group)
 
-        while len(player_votes) < 5:
-            player_votes.append(np.random.randint(6))
-        # Replace any None
-        player_votes = [np.random.randint(6) if i is None else i for i in player_votes]
-
-        player_votes.sort()
-
-        risky_count = player_votes[2]
-
-        # Rnadomly choose player indices to play risky lottery
-        risky_players = random.sample(range(5), risky_count)
-
-        for i, player in enumerate(players):
-            player.participant.player_votes = player_votes
-            if i in risky_players:
-                player.lottery_action = 'risky'
-            else:
-                player.lottery_action = 'safe'
-
-    # Group bit
+    # If group
     if players[0].participant.condition == 'group':
-
-        player_choices = []
-        # Check if all players have made a choice
-        for player in players:
-            if player.field_maybe_none("lottery_action") is None:
-                player.lottery_action = 'safe'
-            player_choices.append(player.lottery_action)
-
-
+        player_choices = [player.field_maybe_none('lottery_action') for player in players]
         while len(player_choices) < 5:
-            player_choices.append('safe')
+            player_choices.append(np.random.choice(['risky', 'safe']))
         # Replace any None
         player_choices = ['safe' if i is None else i for i in player_choices]
-
-        risky_count = player_choices.count('risky')
-
-    # Works for both group types
-    if not players[0].participant.game_extinct:
-
-        group_extinct = False
+        
         for player in players:
+            player.participant.risky_count = player_choices.count('risky')
 
-            player.participant.risky_count = risky_count
+    # Get results of choices    
+    group_extinct = players[0].participant.game_extinct
 
-            random_roll = random.random()
+    player_results = []
+    group_bonus = 0
 
-            if player.participant.game_extinct:
-                player.participant.vars['last_result'] = "0"
-            else:
-                if player.lottery_action == 'safe':
-                    if random_roll < 0.5:
-                        player.participant.vars['last_result'] = "0"
-                    else:
-                        player.participant.vars['last_result'] = "1"
-                        player.participant.vars['game_current_bonus'] += 1
-
-                if player.lottery_action == 'risky':
-                    if random_roll < 0.475:
-                        player.participant.vars['last_result'] = "0"
-                    elif random_roll < 0.95:
-                        player.participant.vars['last_result'] = "10"
-                        player.participant.vars['game_current_bonus'] += 10
-                    else:
-                        player.participant.vars['last_result'] = "extinction"
-                        group_extinct = True
-
-        if group_extinct:
-            for player in players:
-                player.participant.vars['last_result'] = "extinction"
-                player.participant.vars['game_extinct'] = True
-                player.participant.vars['game_current_bonus'] = 0
-
-    game_current_group_bonus = sum([player.participant.vars['game_current_bonus'] for player in players])
-
-    for player in players:
-        player.participant.game_current_group_bonus = game_current_group_bonus
-
-    # If it's a one person group then simulate some outcomes
-    if len(players) == 1:
-        player = players[0]
-        if player.lottery_action == 'safe':
-            other_risky_count = risky_count
-        else:
-            other_risky_count = risky_count - 1
-
-        # Group payout outcomes
-        for _ in range(other_risky_count):
-            random_roll_a = random.random()
-            if random_roll_a < 0.5:
-                player.participant.game_current_group_bonus += 10
-
-        for _ in range(5-other_risky_count):
-            random_roll_a = random.random()
-            if random_roll_a < 0.5:
-                player.participant.game_current_group_bonus += 1
-
-        # Group extinction
+    for i in range(5):
+        player_choice = player_choices[i]
         random_roll = random.random()
-        if random_roll > (0.95**other_risky_count):
-            player.participant.vars['last_result'] = "extinction"
+
+        if player_choice == 'safe':
+            if random_roll < 0.5:
+                player_results.append("0")
+            else:
+                player_results.append("1")
+                group_bonus += 1
+        
+        if player_choice == 'risky':
+            if random_roll < 0.475:
+                player_results.append("0")
+            elif random_roll < 0.95:
+                player_results.append("10")
+                group_bonus += 10
+            else:
+                player_results.append("extinction")
+                group_extinct = True
+
+    # Update player data
+    if not group_extinct:
+        for i, player in enumerate(players):
+            player_result = player_results[i]
+            if player_result == "1":
+                player.participant.game_current_bonus += 1
+            if player_result == "10":
+                player.participant.game_current_bonus += 10
+
+            player.participant.last_result = player_results[i]
+
+            player.participant.game_current_group_bonus += group_bonus
+
+    if group_extinct:
+        for player in players:
+            player.participant.game_extinct = True
             player.participant.game_current_bonus = 0
             player.participant.game_current_group_bonus = 0
-            player.participant.game_extinct = True
+            player.participant.last_result = "extinction"
 
+            
 
 class ResultsWaitPage(WaitPage):   
 

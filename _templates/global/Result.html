@@ -1,0 +1,107 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{{ block title }}
+  Group Result
+{{ endblock }}
+{{ block content }}
+
+  <div class="row">
+    <div class="col-md-6 offset-md-3">
+
+    <h4>Your Outcome</h4>
+    {% if player.participant.last_result == '0' %}
+        <div class="alert alert-secondary" role="alert">
+            +0p
+        </div>
+
+    {% elif player.participant.last_result == '1' %}
+        <div class="alert alert-success" role="alert">
+            +1p
+        </div>
+
+    {% elif player.participant.last_result == '10' %}
+        <div class="alert alert-success" role="alert">
+            +10p
+        </div>
+        
+    {% endif %}
+
+    
+
+    {% if player.participant.last_result == 'extinction' %}
+    <div class="alert alert-danger" role="alert">
+        Extinction! One or more of your group drew the extinction outcome!
+    </div>
+
+    {% else %}
+        {% if not player.participant.game_extinct %}
+        <div class="alert alert-success" role="alert">
+            None of your group drew the extinction outcome.
+        </div>
+        {% endif %}
+    {% endif %}
+
+
+
+    {% if player.participant.game_extinct %}
+        <div class="alert alert-danger" role="alert">
+            <p><strong>You are extinct!</strong> You will still need to continue playing the remaining rounds to get the base payment.
+            However, you will not earn any bonus.</p>
+        </div>
+    {% endif %}
+
+    {% if player.participant.condition == "group" %}
+
+    <h4>Group Choices</h4>
+
+    <p>The 5 players in your group made the following choices:</p>
+    <ul>
+        <li>Risky: {{ risky_count }}.</li>
+        <li>Safe: {{ safe_count }}.</li>
+    </ul>
+
+    {% elif player.participant.condition == "voting" %}
+
+        <h4>Group Votes</h4>
+
+        <p>Each of the 5 players in your group voted for how many players they wanted to play the risky lottery.</p>
+
+        <p>Your group voted: {{ player_votes }}. As a result the computer randomly selected players to play the following lotteries:</p>
+        <ul>
+            <li>Risky lottery count: {{ risky_count }} </li>
+            <li>Safe lottery count: {{ safe_count }} </li>
+        </ul>   
+        {% if player.lottery_action == "risky" %}
+                <p>You were selected to play the risky lottery.</p>
+        {% else %}
+                <p>You were selected to play the safe lottery.</p>
+        {% endif %}
+
+            <p>Your result this round: 
+                {% if player.participant.last_result == '0' %}
+            
+                +0p
+            
+        {% elif player.participant.last_result == '1' %}
+                +1p
+            
+        {% elif player.participant.last_result == '10' %}
+                +10p
+            
+        {% elif player.participant.last_result == 'extinction' %}
+                Extinction! One or more of your group drew the extinction outcome!
+            
+        {% endif %}
+
+    {% endif %}
+
+
+{{ next_button }}
+
+
+    </div>
+  </div>
+
+
+{{ endblock }}

@@ -19,6 +19,7 @@ def creating_session(subsession):
 
 
         if subsession.session.config["name"] == "practice_group":
+
             
             players = subsession.get_players()
             for player in players:
@@ -28,9 +29,11 @@ def creating_session(subsession):
                 player.participant.is_dropout = False
                 player.participant.wrong_answers = []
                 player.participant.exclusion = False
-                player.participant.condition = "group"
+                player.participant.condition = np.random.choice(["group", "voting"])
                 player.participant.switched = np.random.choice([True, False])
-
+                
+            players = subsession.get_players()
+        
 
 class C(BaseConstants):
     NAME_IN_URL = 'practice_group'
@@ -85,9 +88,10 @@ def group_by_arrival_time_method(self, waiting_players):
 
 def set_game_vars(group):
     for player in group.get_players():
-        player.participant.practice_current_bonus = 0
-        player.participant.practice_extinct = False
-        player.participant.practice_current_group_bonus = 0
+        player.participant.game_current_bonus = 0
+        player.participant.game_extinct = False
+        player.participant.game_current_group_bonus = 0
+        player.participant.information = None
 
 class GroupWaitPage(WaitPage):
     
@@ -105,30 +109,6 @@ class GroupWaitPage(WaitPage):
 def expected_value_strategy(n_risky, endowment=0, p_survive=0.95, e_risky=5, e_safe = 0.5, n_rounds=100):
 
     return p_survive**n_risky * (endowment + e_risky * n_risky + e_safe * (n_rounds - n_risky))
-
-class OptimalChoices(Page):
-    
-    timeout_seconds = 240
-
-    def is_displayed(player):
-        return player.round_number == 1 and player.participant.vars['condition'] != 'indy' and player.participant.vars['information'] == 'optimal'
-
-    def vars_for_template(player):
-    
-        n_rounds = 100
-        n_riskys = list(range(n_rounds))
-        expected_values = [expected_value_strategy(n_risky) for n_risky in n_riskys]
-
-        # Get max n_riskys
-        optimal_n_risky = n_riskys[np.argmax(expected_values)]
-        optimal_n_risky_per_player = optimal_n_risky / 5
-
-        return {
-            'optimal_n_risky': optimal_n_risky,
-            'optimal_n_risky_per_player': optimal_n_risky_per_player,
-            'n_riskys': n_riskys,
-            'expected_values': expected_values
-        }
 
 class GetReady(Page):
 
@@ -205,7 +185,7 @@ def get_results(group):
             risky_count += 1
         safe_count = 5 - risky_count
 
-    if not player.participant.practice_extinct:
+    if not player.participant.game_extinct:
         player.participant.risky_count = risky_count
         
         if player.lottery_action == 'safe':
@@ -215,7 +195,7 @@ def get_results(group):
                 player.participant.vars['last_result'] = "0"
             else:
                 player.participant.vars['last_result'] = "1"
-                player.participant.vars['practice_current_bonus'] += 1
+                player.participant.vars['game_current_bonus'] += 1
 
         if player.lottery_action == 'risky':
             other_risky_count = risky_count - 1
@@ -224,31 +204,31 @@ def get_results(group):
                 player.participant.vars['last_result'] = "0"
             elif random_roll < 0.95:
                 player.participant.vars['last_result'] = "10"
-                player.participant.vars['practice_current_bonus'] += 10
+                player.participant.vars['game_current_bonus'] += 10
             else:
                 player.participant.vars['last_result'] = "extinction"
-                player.participant.vars['practice_current_bonus'] = 0
+                player.participant.vars['game_current_bonus'] = 0
 
         # Sim other player outcomes
         # Group payout outcomes
-        player.participant.practice_current_group_bonus += player.participant.practice_current_bonus
+        player.participant.game_current_group_bonus += player.participant.game_current_bonus
         for _ in range(other_risky_count):
             random_roll_a = random.random()
             if random_roll_a < 0.5:
-                player.participant.practice_current_group_bonus += 10
+                player.participant.game_current_group_bonus += 10
 
         for _ in range(5-other_risky_count):
             random_roll_a = random.random()
             if random_roll_a < 0.5:
-                player.participant.practice_current_group_bonus += 1
+                player.participant.game_current_group_bonus += 1
 
         # Group extinction
         random_roll = random.random()
         if random_roll > (0.95**other_risky_count):
             player.participant.vars['last_result'] = "extinction"
-            player.participant.practice_current_bonus = 0
-            player.participant.practice_current_group_bonus = 0
-            player.participant.practice_extinct = True
+            player.participant.game_current_bonus = 0
+            player.participant.game_current_group_bonus = 0
+            player.participant.game_extinct = True
 
 
 class ResultsWaitPage(WaitPage):   
