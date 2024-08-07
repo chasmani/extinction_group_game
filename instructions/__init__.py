@@ -125,7 +125,7 @@ class ConditionChoice(Page):
 	form_fields = ["condition_choice"]
 
 	def is_displayed(player):
-		return True
+		return False
 
 	def before_next_page(player, timeout_happened):
 		condition_choice = player.condition_choice

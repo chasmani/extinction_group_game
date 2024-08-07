@@ -57,7 +57,8 @@ class ConditionChoice(Page):
     form_fields = ["lottery_switch_choice"]
 
     def is_displayed(player):
-        return player.round_number == 1 and "condition" not in player.participant.vars
+        return False
+        #return player.round_number == 1 and "condition" not in player.participant.vars
 
     def before_next_page(player, timeout_happened):
         player.participant.vars["switched"] = player.lottery_switch_choice == 'switched'

@@ -74,14 +74,16 @@ class ParticipantConsent(Page):
 
 	def before_next_page(player, timeout_happened):
 		
-
-		random_draw = random.random()
-		if random_draw < 0.2:
-			player.participant.vars['condition'] = 'indy'
-		elif random_draw < 0.6:
-			player.participant.vars['condition'] = 'group'
+		if 'condition' in player.session.config:
+			player.participant.condition = player.session.config["condition"]
 		else:
-			player.participant.vars['condition'] = 'voting'
+			random_draw = random.random()
+			if random_draw < 0.2:
+				player.participant.vars['condition'] = 'indy'
+			elif random_draw < 0.6:
+				player.participant.vars['condition'] = 'group'
+			else:
+				player.participant.vars['condition'] = 'voting'
 	   
 		random_draw_2 = random.random()
 		if random_draw_2 < 0.5:
@@ -92,6 +94,7 @@ class ParticipantConsent(Page):
 		player.participant.wrong_answers = []
 		player.participant.is_dropout = False
 
+		print(player.participant.condition)
 
 
 page_sequence = [Welcome,
