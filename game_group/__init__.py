@@ -62,6 +62,18 @@ class Player(BasePlayer):
         widget=widgets.RadioSelect
     )
 
+    optimal_comprehension = models.StringField(
+        label="The optimal number of risky lotteries is . . . ",
+        choices=[
+            ["8 and 40", "I personally play a total of 8 risky lotteries (~40 for the group)"], 
+            ["1 to 2 and 8", "The group in total plays 8 risky lotteries (~1 to 2 for me personally)"], 
+            ["0", "No one should play any risky lotteries"],
+            ["3 and 15", "I personally play a total of 3 risky lotteries (~15 for the group)"],
+        ],
+        widget=widgets.RadioSelect,
+        initial=''
+        )
+
     condition_choice = models.StringField(
         label="Please choose the condition you would like to play in.",
         choices=[
@@ -89,6 +101,10 @@ class Player(BasePlayer):
         widget=widgets.RadioSelect
     )
 
+def optimal_comprehension_error_message(player, value):
+    if value != '1 to 2 and 8':
+        player.participant.wrong_answers.append('quiz_group_extinction')
+        return 'That is not correct. Please try again.'
 
 def group_by_arrival_time_method(self, waiting_players):
 
@@ -144,9 +160,9 @@ class GroupWaitPage(WaitPage):
     def is_displayed(player):
         return player.round_number == 1 and player.participant.condition in ['group', 'voting']
 
-def expected_value_strategy(n_risky, endowment = 0, p_survive=0.95, e_risky=5, e_safe = 0.5, n_rounds=100):
+def expected_value_strategy(n_risky, group_balance = 0, p_survive=0.95, e_risky=5, e_safe = 0.5, n_rounds=100):
 
-    return p_survive**n_risky * (endowment + e_risky * n_risky + e_safe * (n_rounds - n_risky))
+    return p_survive**n_risky * (group_balance + e_risky * n_risky + e_safe * (n_rounds - n_risky))
 
 
 class ConditionChoice(Page):
@@ -171,18 +187,19 @@ class OptimalChoices(Page):
     
     timeout_seconds = C.TIMEOUT_CHOICE * 2
 
+    form_model = 'player'
+    form_fields = ['optimal_comprehension']
+
     def is_displayed(player):
         return player.round_number == 1 and player.participant.vars['condition'] != 'indy' and player.participant.vars['information'] == 'optimal'
 
     def vars_for_template(player):
     
-        n_rounds = 100
-        n_riskys = list(range(n_rounds))
+        total_rounds_left = 100
+        n_riskys = list(range(total_rounds_left))
         expected_values = [expected_value_strategy(n_risky) for n_risky in n_riskys]
 
-        # Get max n_riskys
-        optimal_n_risky = n_riskys[np.argmax(expected_values)]
-        optimal_n_risky_per_player = optimal_n_risky / 5
+        optimal_n_risky, optimal_n_risky_per_player = get_optimal_n_riskys(total_rounds_left)
 
         return {
             'optimal_n_risky': optimal_n_risky,
@@ -190,6 +207,23 @@ class OptimalChoices(Page):
             'n_riskys': n_riskys,
             'expected_values': expected_values
         }
+    
+def get_optimal_n_riskys(total_rounds_left, group_balance=0):
+
+    n_riskys = list(range(total_rounds_left))
+    expected_values = [expected_value_strategy(n_risky, group_balance=group_balance) for n_risky in n_riskys]
+
+    # Get max n_riskys
+    optimal_n_risky = n_riskys[np.argmax(expected_values)]
+
+        # Optimal n_risky if integer or a fraction
+    if optimal_n_risky % 5 == 0:
+        optimal_n_risky_per_player = optimal_n_risky // 5
+    else:
+        optimal_n_risky_per_player = "{} to {}".format(optimal_n_risky // 5, int(optimal_n_risky//5 + 1))
+
+    return optimal_n_risky, optimal_n_risky_per_player
+
 
 class GetReady(Page):
 
@@ -212,9 +246,14 @@ class GroupDecision(Page):
             player.participant.is_dropout = True
 
     def vars_for_template(player):
+
+        total_rounds_left = (C.NUM_ROUNDS - player.round_number + 1) * 5
+        group_balance = player.participant.game_current_group_bonus
+        optimal_n_risky, optimal_n_risky_per_player = get_optimal_n_riskys(total_rounds_left, group_balance=group_balance)
+        
         return {
-            'optimal_n_risky': 8,
-            'optimal_n_risky_per_player': 8/5
+            'optimal_n_risky': optimal_n_risky,
+            'optimal_n_risky_per_player': optimal_n_risky_per_player
         }
 
 class VotingDecision(Page):
@@ -231,9 +270,14 @@ class VotingDecision(Page):
             player.participant.is_dropout = True
 
     def vars_for_template(player):
+        
+        total_rounds_left = (C.NUM_ROUNDS - player.round_number + 1) * 5
+        group_balance = player.participant.game_current_group_bonus
+        optimal_n_risky, optimal_n_risky_per_player = get_optimal_n_riskys(total_rounds_left, group_balance=group_balance)
+        
         return {
-            'optimal_n_risky': 8,
-            'optimal_n_risky_per_player': 8/5
+            'optimal_n_risky': optimal_n_risky,
+            'optimal_n_risky_per_player': optimal_n_risky_per_player
         }
 
 

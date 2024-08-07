@@ -21,7 +21,7 @@
                 <p>The strategy that pays the highest bonus, on average, is to play:</p>
                 <ul>
                   <li>A total of {{ optimal_n_risky }} risky lotteries in your group over the entire game.</li>
-                  <li>This works out to {{ optimal_n_risky_per_player|to1 }} risky lotteries per player over the entire game.</li>
+                  <li>This works out at {{ optimal_n_risky_per_player }} risky lotteries per player over the entire game.</li>
                 </ul>
                    
                 <p>NOTE: There is always an element of chance in the lotteries, so you might do better or worse than the average.</p>
@@ -81,10 +81,26 @@
             </div>
             </div>
 
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+            
+                <h4>Optimal Strategy</h4>
+                <div class="col-md-4 optimal-info">
+            
+                    <p class="margin-h2"><h2>{{ optimal_n_risky }}</h2> total risky lotteries for the group over the game.</p>
+                </div>
+                <div class="col-md-4 optimal-info">
+            
+                <p class="margin-h2"><h2>{{ optimal_n_risky_per_player }}</h2> risky lotteries per player over the game.</p>
+                
+                </div>
+                </div>
+                </div>
 
         <div class="row">
         <div class="col-md-8 offset-md-2">
 
+          {{ formfields }}
 
 {{ next_button }}
 
