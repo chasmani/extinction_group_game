@@ -71,6 +71,15 @@ class Player(BasePlayer):
         widget=widgets.RadioSelect
     )
 
+    info_choice = models.StringField(
+        label="Please choose the information condition you would like to play in.",
+        choices=[
+            ['none', 'No Information'],
+            ['optimal', 'Optimal Information'],
+        ],
+        widget=widgets.RadioSelect
+    )
+
     lottery_switch_choice = models.StringField(
         label="Which way round do you want to see the lotteries?",
         choices=[
@@ -99,7 +108,7 @@ def group_by_arrival_time_method(self, waiting_players):
         if len(players_in_condition) >= 5:
             this_group = players_in_condition[:5]
             unique_group_id = np.random.randint(1000000000)
-            # Rnadomly choose information condition
+            # Randomly choose information condition
             information_condition = np.random.choice(["none", "optimal"])
             for player in this_group:
                 player.participant.unique_group_id = unique_group_id
@@ -138,6 +147,24 @@ class GroupWaitPage(WaitPage):
 def expected_value_strategy(n_risky, endowment = 0, p_survive=0.95, e_risky=5, e_safe = 0.5, n_rounds=100):
 
     return p_survive**n_risky * (endowment + e_risky * n_risky + e_safe * (n_rounds - n_risky))
+
+
+class ConditionChoice(Page):
+
+    form_model = "player"
+    form_fields = ["condition_choice", "info_choice"]
+
+    def is_displayed(player):
+        return player.round_number == 1
+
+    def before_next_page(player, timeout_happened):
+
+        group = player.group
+        players = group.get_players()
+
+        for player in players:
+            player.participant.condition = player.condition_choice
+            player.participant.information = player.info_choice
 
 
 class OptimalChoices(Page):
@@ -248,7 +275,6 @@ def get_results(group):
 
     players = group.get_players()
 
-
     # If voting
     if players[0].participant.condition == 'voting':
         player_choices = get_voting_result(group)
@@ -312,7 +338,6 @@ def get_results(group):
             player.participant.last_result = "extinction"
 
             
-
 class ResultsWaitPage(WaitPage):   
 
     after_all_players_arrive = 'get_results'
@@ -364,6 +389,7 @@ class VotingResult(Page):
         }
 
 page_sequence = [GroupWaitPage, 
+                 ConditionChoice,
                 OptimalChoices, 
                 GetReady,
                  GroupDecision,

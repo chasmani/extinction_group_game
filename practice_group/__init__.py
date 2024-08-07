@@ -156,8 +156,6 @@ class VotingDecision(Page):
         }
 
 
-
-
 class ResultsWaitPage(WaitPage):   
 
     after_all_players_arrive = 'get_results'

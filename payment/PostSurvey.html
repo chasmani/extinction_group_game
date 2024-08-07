@@ -1,0 +1,24 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{{ block title }}
+  Survey
+{{ endblock }}
+{{ block content }}
+
+
+  <div class="row">
+    <div class="col-md-8 offset-md-2">
+        <p>Finally, please answer a quick question about the game.</p>
+
+      
+{{ formfields }}
+
+{{ next_button }}
+
+
+    </div>
+  </div>
+
+
+{{ endblock }}

@@ -22,6 +22,11 @@ SESSION_CONFIGS = [
         num_demo_participants=10,
     ),
     dict(
+        name='payment',
+        app_sequence=['payment'],
+        num_demo_participants=5,
+    ),
+    dict(
         name="full_experiment",
         app_sequence=['consent', 'instructions', 'practice_indy', 'practice_group', 'game_indy', 'game_group', 'payment'],
         num_demo_participants=10,
@@ -53,7 +58,7 @@ PARTICIPANT_FIELDS = [
     "unique_group_id",
     "wait_page_arrival",
     "risky_count",
-    "player_votes" 
+    "player_votes"
 ]
 
 SESSION_FIELDS = []
