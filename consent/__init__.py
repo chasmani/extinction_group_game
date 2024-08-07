@@ -65,7 +65,6 @@ class Player(BasePlayer):
 								  ]
 								  )
 
-
 class Welcome(Page):
 	pass
 	
@@ -74,6 +73,8 @@ class ParticipantConsent(Page):
 	form_fields = ["consent_1", "consent_2", "consent_3", "consent_4", "consent_5", "consent_6", "consent_7"]
 
 	def before_next_page(player, timeout_happened):
+		
+
 		random_draw = random.random()
 		if random_draw < 0.2:
 			player.participant.vars['condition'] = 'indy'

@@ -157,6 +157,8 @@ class ConditionChoice(Page):
 			player.participant.condition = 'voting'
 			player.participant.information = 'none'
 
+		print("Instructions ConditionChoice: ", player.participant.vars)
+
 class Instructions1(Page):
 	form_model = "player"
 	form_fields = ["quiz_extinction", "quiz_total_rounds"]

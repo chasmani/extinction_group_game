@@ -42,7 +42,7 @@
 
     <h4>Group Choices</h4>
 
-    <p>The players in your group made the following choices:</p>
+    <p>The players in your group (including you) made the following choices:</p>
     <ul>
         <li>Risky: {{ risky_count }}.</li>
         <li>Safe: {{ safe_count }}.</li>
@@ -55,7 +55,7 @@
 
         <p>Each of the players in your group voted for how many players they wanted to play the risky lottery.</p>
 
-        <p>Your group voted: {{ player_votes }}. <p>(You chose {{ player.voter_decision }})</p>As a result the computer randomly selected players to play the following lotteries:</p>
+        <p>Your group voted (including you): {{ player_votes }}. <p>(You chose {{ player.voter_decision }})</p>As a result the computer randomly selected players to play the following lotteries:</p>
         <ul>
             <li>Risky lottery count: {{ risky_count }} </li>
             <li>Safe lottery count: {{ safe_count }} </li>
@@ -80,7 +80,7 @@
 
     {% endif %}
 
-    {% if subsession.session.config.name == "practice_group" %}
+    {% if C.NAME_IN_URL == "practice_group" %}
         <h4>NOTE: YOU ARE PLAYING WITH BOTS DURING THIS PRACTICE GAME</h4>
     {% endif %}
 

@@ -93,7 +93,6 @@ def set_game_vars(group):
         player.participant.game_current_bonus = 0
         player.participant.game_extinct = False
         player.participant.game_current_group_bonus = 0
-        player.participant.information = None
 
 class GroupWaitPage(WaitPage):
     
