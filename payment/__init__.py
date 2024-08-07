@@ -20,6 +20,9 @@ def creating_session(subsession):
             for player in players:
 
                 player.participant.information = random.choice(["optimal", "none"])
+                player.participant.condition = random.choice(["group", "voting", "indy"])
+                player.participant.game_current_bonus = random.randint(0, 2)
+
 
 class C(BaseConstants):
     NAME_IN_URL = 'payment'
@@ -44,7 +47,7 @@ class Player(BasePlayer):
         initial='')
     
     optimal_belief_text = models.LongStringField(
-        label='If you did not answer "Yes" above, please explain why.',
+        label='Why did you believe that the optimal strategy was not correct? Please provide a brief explanation.',
         blank=True
     )
 
@@ -56,7 +59,7 @@ class Player(BasePlayer):
 class PostSurveyOptimal(Page):
 
     form_model = "player"
-    form_fields = ['optimal_belief', 'optimal_belief_text']
+    form_fields = ['optimal_belief']
 
     def is_displayed(player):
         if player.participant.condition in ["voting", "group"]:
@@ -64,6 +67,18 @@ class PostSurveyOptimal(Page):
                 return True
         return False
     
+class PostSurveyOptimal2(Page):
+
+    form_model = "player"
+    form_fields = ['optimal_belief_text']
+
+    def is_displayed(player):
+        if player.participant.condition in ["voting", "group"]:
+            if player.participant.information == "optimal":
+                if player.optimal_belief != "Yes":
+                    return True
+        return False
+
 class PostSurvey(Page):
 
     form_model = "player"
@@ -73,4 +88,4 @@ class PostSurvey(Page):
 class ThankYou(Page):
     pass
 
-page_sequence = [PostSurveyOptimal, PostSurvey, ThankYou]
+page_sequence = [PostSurveyOptimal, PostSurveyOptimal2, PostSurvey, ThankYou]

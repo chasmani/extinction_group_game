@@ -37,7 +37,7 @@ class C(BaseConstants):
 	PLAYERS_PER_GROUP = None
 	NUM_ROUNDS = 20
 	TIMEOUT_GROUPING = 420
-	TIMEOUT_CHOICE = 90
+	TIMEOUT_CHOICE = 60
 	TIMEOUT_INFO = 30
 
 class Subsession(BaseSubsession):
@@ -153,7 +153,6 @@ def group_by_arrival_time_method(self, waiting_players):
 			for player in this_group:
 				player.participant.information = info_condition
 				player.participant.unique_group_id = unique_group_id
-				
 			return this_group
 
 	# For players waiting too long
@@ -252,10 +251,9 @@ class OptimalChoices(Page):
 		}
 	
 
-
 class GetReady(Page):
 
-	timeout_seconds = C.TIMEOUT_INFO
+	timeout_seconds = 120
 	
 	def is_displayed(player):
 		return player.round_number == 1 and player.participant.vars['condition'] != 'indy'
