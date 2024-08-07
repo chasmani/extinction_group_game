@@ -112,9 +112,14 @@ class Player(BasePlayer):
         widget=widgets.RadioSelect
     )
 
-def optimal_comprehension_error_message(player, value):
-    if value != '1 to 2 and 8':
-        player.participant.wrong_answers.append('quiz_group_extinction')
+def optimal_comprehension_group_error_message(player, value):
+    if value != '8':
+        player.participant.wrong_answers.append('optimal_comprehension_group')
+        return 'That is not correct. Please try again.'
+    
+def optimal_comprehension_indy_error_message(player, value):
+    if value != '1 to 2':
+        player.participant.wrong_answers.append('optimal_comprehension_indy')
         return 'That is not correct. Please try again.'
 
 def group_by_arrival_time_method(self, waiting_players):
@@ -299,7 +304,11 @@ def get_voting_result(group):
     player_votes = [player.field_maybe_none('voter_decision') for player in players]
 
     while len(player_votes) < 5:
-        player_votes.append(np.random.randint(6))
+        if np.random.random() < 0.5:
+            player_votes.append(1)
+        else:
+            player_votes.append(0)
+
     # Replace any None
     player_votes = [np.random.randint(6) if i is None else i for i in player_votes]
     player_votes.sort()
@@ -338,7 +347,10 @@ def get_results(group):
     if players[0].participant.condition == 'group':
         player_choices = [player.field_maybe_none('lottery_action') for player in players]
         while len(player_choices) < 5:
-            player_choices.append(np.random.choice(['risky', 'safe']))
+            if np.random.random() < 0.08:
+                player_choices.append('risky')
+            else:
+                player_choices.append('safe')
         # Replace any None
         player_choices = ['safe' if i is None else i for i in player_choices]
         
