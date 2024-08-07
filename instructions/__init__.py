@@ -141,19 +141,21 @@ class ConditionChoice(Page):
 	def before_next_page(player, timeout_happened):
 		condition_choice = player.condition_choice
 		if condition_choice == 'indy':
-			player.participant.vars['condition'] = 'indy'
+			player.participant.condition = 'indy'
+			player.participant.information = 'none'
+
 		elif condition_choice == 'group_info':
-			player.participant.vars['condition'] = 'group'
-			player.participant.vars['info'] = "optimal"
+			player.participant.condition = 'group'
+			player.participant.information = 'optimal'
 		elif condition_choice == 'group_no_info':
-			player.participant.vars['condition'] = 'group'
-			player.participant.vars['info'] = "none"
+			player.participant.condition = 'group'
+			player.participant.information = 'none'
 		elif condition_choice == 'voting_info':
-			player.participant.vars['condition'] = 'voting'
-			player.participant.vars['info'] = "optimal"
+			player.participant.condition = 'voting'
+			player.participant.information = 'optimal'
 		elif condition_choice == 'voting_no_info':
-			player.participant.vars['condition'] = 'voting'
-			player.participant.vars['info'] = "none"
+			player.participant.condition = 'voting'
+			player.participant.information = 'none'
 
 class Instructions1(Page):
 	form_model = "player"

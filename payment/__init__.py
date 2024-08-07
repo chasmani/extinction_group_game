@@ -53,16 +53,24 @@ class Player(BasePlayer):
         blank=True
     )
 
+class PostSurveyOptimal(Page):
+
+    form_model = "player"
+    form_fields = ['optimal_belief', 'optimal_belief_text']
+
+    def is_displayed(player):
+        if player.participant.condition in ["indy", "group"]:
+            if player.participant.information == "optimal":
+                return True
+        return False
+    
 class PostSurvey(Page):
 
     form_model = "player"
-    form_fields = ['optimal_belief', 'optimal_belief_text', 'free_text_box']
-
-    def is_displayed(player):
-        return player.participant.information == "optimal"
+    form_fields = ['free_text_box']
 
 
 class ThankYou(Page):
     pass
 
-page_sequence = [PostSurvey, ThankYou]
+page_sequence = [PostSurveyOptimal, PostSurvey, ThankYou]

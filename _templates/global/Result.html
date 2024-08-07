@@ -27,11 +27,6 @@
         
     {% endif %}
 
-    
-
-   
-
-
     {% if player.participant.game_extinct %}
         <div class="alert alert-danger" role="alert">
             <p><strong>You are extinct!</strong> One of your group has drawn the extinction outcome. You will still need to continue playing the remaining rounds to get the base payment.
@@ -47,19 +42,20 @@
 
     <h4>Group Choices</h4>
 
-    <p>The 5 players in your group made the following choices:</p>
+    <p>The players in your group made the following choices:</p>
     <ul>
         <li>Risky: {{ risky_count }}.</li>
         <li>Safe: {{ safe_count }}.</li>
     </ul>
+    <p>(You chose {{ player.lottery_action }})</p>
 
     {% elif player.participant.condition == "voting" %}
 
         <h4>Group Votes</h4>
 
-        <p>Each of the 5 players in your group voted for how many players they wanted to play the risky lottery.</p>
+        <p>Each of the players in your group voted for how many players they wanted to play the risky lottery.</p>
 
-        <p>Your group voted: {{ player_votes }}. As a result the computer randomly selected players to play the following lotteries:</p>
+        <p>Your group voted: {{ player_votes }}. <p>(You chose {{ player.voter_decision }})</p>As a result the computer randomly selected players to play the following lotteries:</p>
         <ul>
             <li>Risky lottery count: {{ risky_count }} </li>
             <li>Safe lottery count: {{ safe_count }} </li>

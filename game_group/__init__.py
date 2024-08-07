@@ -37,7 +37,7 @@ class C(BaseConstants):
     PLAYERS_PER_GROUP = None
     NUM_ROUNDS = 20
     TIMEOUT_GROUPING = 1
-    TIMEOUT_CHOICE = 60
+    TIMEOUT_CHOICE = 90
     TIMEOUT_INFO = 30
 
 class Subsession(BaseSubsession):
@@ -178,6 +178,7 @@ class GroupWaitPage(WaitPage):
         """
     
     def is_displayed(player):
+        print("Game_group wait page 1: " , player.participant.vars)
         return player.round_number == 1 and player.participant.condition in ['group', 'voting']
 
 def expected_value_strategy(n_risky, group_balance = 0, p_survive=0.95, e_risky=5, e_safe = 0.5, n_rounds=100):

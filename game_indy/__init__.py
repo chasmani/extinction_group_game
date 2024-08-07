@@ -104,6 +104,6 @@ class IndyDecision(Page):
 
 class GetReady(Page):
     def is_displayed(player):
-        return player.round_number == 1 and player.participant.vars['condition'] != 'indy'
+        return player.round_number == 1 and player.participant.vars['condition'] == 'indy'
 
 page_sequence = [GetReady, ConditionChoice, IndyDecision]
