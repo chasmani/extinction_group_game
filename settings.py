@@ -30,6 +30,12 @@ SESSION_CONFIGS = [
         name="full_experiment",
         app_sequence=['consent', 'instructions', 'practice_indy', 'practice_group', 'game_indy', 'game_group', 'payment'],
         num_demo_participants=10,
+    ),
+    dict(name="full_experiment_voting_with_info",
+        app_sequence=['consent', 'instructions', 'practice_indy', 'practice_group', 'game_indy', 'game_group', 'payment'],
+        num_demo_participants=10,
+        condition="voting",
+        information="optimal"
     )
 ]
 
