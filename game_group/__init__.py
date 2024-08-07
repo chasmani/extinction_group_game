@@ -127,8 +127,10 @@ def group_by_arrival_time_method(self, waiting_players):
     for player in waiting_players:
         if len(player.participant.wrong_answers) > 0:
             player.participant.unique_group_id = np.random.randint(1000000000)
-            if "information" not in player.participant.vars:
-                    player.participant.information = np.random.choice(["none", "optimal"])
+            if 'information' in player.session.config:
+			    player.participant.information = player.session.config["information"]
+            else:
+                player.participant.information = np.random.choice(["none", "optimal"])
             return [player]
 
     for condition in ["group", "voting"]:
@@ -143,12 +145,13 @@ def group_by_arrival_time_method(self, waiting_players):
             unique_group_id = np.random.randint(1000000000)
             # Randomly choose information condition
 
-            if "information" not in this_group[0].participant.vars:
+            if 'information' in player.session.config:
+			    info_condition = player.session.config["information"]
+            else:
                 info_condition = np.random.choice(["none", "optimal"])
-                for player in this_group:
-                    player.participant.information = info_condition
 
             for player in this_group:
+                player.participant.information = info_condition
                 player.participant.unique_group_id = unique_group_id
                 
             return this_group
@@ -157,8 +160,11 @@ def group_by_arrival_time_method(self, waiting_players):
     for player in waiting_players:
         if waiting_too_long(player):
             player.participant.unique_group_id = np.random.randint(1000000000)
-            if "information" not in player.participant.vars:
-                    player.participant.information = np.random.choice(["none", "optimal"])
+
+            if 'information' in player.session.config:
+			    player.participant.information = player.session.config["information"]
+            else:
+                player.participant.information = np.random.choice(["none", "optimal"])
             return [player]
 
 def waiting_too_long(player):
@@ -214,9 +220,7 @@ class ConditionChoice(Page):
         return False
         #return player.round_number == 1
 
-    def before_next_page(player, timeout_happened):
-
-        
+    def before_next_page(player, timeout_happened):        
         player.participant.condition = player.condition_choice
         player.participant.information = player.info_choice
 
