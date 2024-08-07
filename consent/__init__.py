@@ -64,7 +64,8 @@ class Player(BasePlayer):
 									  [True, "Yes"],
 								  ]
 								  )
-	
+
+
 class Welcome(Page):
 	pass
 	
@@ -89,6 +90,7 @@ class ParticipantConsent(Page):
 
 		player.participant.wrong_answers = []
 		player.participant.is_dropout = False
+
 
 
 page_sequence = [Welcome,

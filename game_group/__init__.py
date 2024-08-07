@@ -127,7 +127,8 @@ def group_by_arrival_time_method(self, waiting_players):
     for player in waiting_players:
         if len(player.participant.wrong_answers) > 0:
             player.participant.unique_group_id = np.random.randint(1000000000)
-            player.participant.information = np.random.choice(["none", "optimal"])
+            if "information" not in player.participant.vars:
+                    player.participant.information = np.random.choice(["none", "optimal"])
             return [player]
 
     for condition in ["group", "voting"]:
@@ -141,17 +142,20 @@ def group_by_arrival_time_method(self, waiting_players):
             this_group = players_in_condition[:5]
             unique_group_id = np.random.randint(1000000000)
             # Randomly choose information condition
-            information_condition = np.random.choice(["none", "optimal"])
             for player in this_group:
+                
+                if "information" not in player.participant.vars:
+                    player.participant.information = np.random.choice(["none", "optimal"])
                 player.participant.unique_group_id = unique_group_id
-                player.participant.information = information_condition
+                
             return this_group
 
     # For players waiting too long
     for player in waiting_players:
         if waiting_too_long(player):
             player.participant.unique_group_id = np.random.randint(1000000000)
-            player.participant.information = np.random.choice(["none", "optimal"])
+            if "information" not in player.participant.vars:
+                    player.participant.information = np.random.choice(["none", "optimal"])
             return [player]
 
 def waiting_too_long(player):
@@ -187,6 +191,7 @@ class ConditionChoice(Page):
     form_fields = ["condition_choice", "info_choice"]
 
     def is_displayed(player):
+        return False
         return player.round_number == 1
 
     def before_next_page(player, timeout_happened):
@@ -207,6 +212,7 @@ class OptimalChoices(Page):
     form_fields = ['optimal_comprehension_group', 'optimal_comprehension_indy']
 
     def is_displayed(player):
+        
         return player.round_number == 1 and player.participant.vars['condition'] != 'indy' and player.participant.vars['information'] == 'optimal'
 
     def vars_for_template(player):
@@ -343,7 +349,7 @@ def get_results(group):
     if players[0].participant.condition == 'voting':
         player_choices = get_voting_result(group)
 
-    # If group
+    # If group  
     if players[0].participant.condition == 'group':
         player_choices = [player.field_maybe_none('lottery_action') for player in players]
         while len(player_choices) < 5:
