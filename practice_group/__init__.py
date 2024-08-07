@@ -113,8 +113,6 @@ def expected_value_strategy(n_risky, endowment=0, p_survive=0.95, e_risky=5, e_s
 
 class GetReady(Page):
 
-    timeout_seconds = 30
-    
     def is_displayed(player):
         return player.round_number == 1 and player.participant.vars['condition'] != 'indy'
 
@@ -122,38 +120,17 @@ class GroupDecision(Page):
 
     form_model = 'player'
     form_fields = ['lottery_action']
-    timeout_seconds = 60
     
     def is_displayed(player):
-        return player.participant.condition == 'group' and not player.participant.is_dropout
-   
-    def before_next_page(player, timeout_happened):
-        if timeout_happened:
-            player.participant.is_dropout = True
-
-    def vars_for_template(player):
-        return {
-            'optimal_n_risky': 8
-        }
+        return player.participant.condition == 'group'
 
 class VotingDecision(Page):
 
     form_model = 'player'
     form_fields = ['voter_decision']
-    timeout_seconds = 60
     
     def is_displayed(player):
-        return player.participant.condition == 'voting' and not player.participant.is_dropout
-    
-    def before_next_page(player, timeout_happened):
-        if timeout_happened:
-            player.participant.is_dropout = True
-
-    def vars_for_template(player):
-        return {
-            'optimal_n_risky': 8
-        }
-
+        return player.participant.condition == 'voting'
 
 class ResultsWaitPage(WaitPage):   
 
@@ -165,10 +142,8 @@ class ResultsWaitPage(WaitPage):
 
 class GroupResult(Page):
 
-    timeout_seconds = 30
-
     def is_displayed(player):
-        return player.participant.condition == 'group' and not player.participant.is_dropout
+        return player.participant.condition == 'group'
 
     def vars_for_template(player):
 
@@ -185,11 +160,9 @@ class GroupResult(Page):
             player.participant.wait_page_arrival = time.time()
 
 class VotingResult(Page):
-
-    timeout_seconds = 30
     
     def is_displayed(player):
-        return player.participant.condition == 'voting' and not player.participant.is_dropout
+        return player.participant.condition == 'voting'
     
     def vars_for_template(player):
 
