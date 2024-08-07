@@ -62,13 +62,24 @@ class Player(BasePlayer):
         widget=widgets.RadioSelect
     )
 
-    optimal_comprehension = models.StringField(
-        label="The strategy that should work best for the group is . . . ",
+    optimal_comprehension_group = models.StringField(
+        label="For the group as a whole, the optimal total number of risky lotteries is . . .  ",
         choices=[
-            ["8 and 40", "I personally play a total of 8 risky lotteries (~40 for the group)"], 
-            ["1 to 2 and 8", "The group in total plays 8 risky lotteries (~1 to 2 for me personally)"], 
-            ["0", "No one should play any risky lotteries"],
-            ["3 and 15", "I personally play a total of 3 risky lotteries (~15 for the group)"],
+            ["20", "The group in total plays 20 risky strategies over the entire game"], 
+            ["8", "The group in total plays 8 risky strategies over the entire game"], 
+            ["0", "The group in total plays 0 risky strategies over the entire game"],
+        ],
+        widget=widgets.RadioSelect,
+        initial=''
+        )
+    
+    optimal_comprehension_indy = models.StringField(
+        label="If each player wants the group to play the optimal number of risky lotteries, how many risky lotteries should each player play?",
+        choices=[
+            ["5 to 6", "Each player plays 5 to 6 risky lotteries over the entire game"], 
+            ["1 to 2", "Each player plays 1 to 2 risky lotteries over the entire game"], 
+            ["0 to 1", "Each player plays 0 to 1 risky lotteries over the entire game"],
+            ["0", "Each player plays 0 risky lotteries over the entire game"],
         ],
         widget=widgets.RadioSelect,
         initial=''
@@ -188,7 +199,7 @@ class OptimalChoices(Page):
     timeout_seconds = C.TIMEOUT_CHOICE * 2
 
     form_model = 'player'
-    form_fields = ['optimal_comprehension']
+    form_fields = ['optimal_comprehension_group', 'optimal_comprehension_indy']
 
     def is_displayed(player):
         return player.round_number == 1 and player.participant.vars['condition'] != 'indy' and player.participant.vars['information'] == 'optimal'
