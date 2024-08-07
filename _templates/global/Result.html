@@ -29,25 +29,17 @@
 
     
 
-    {% if player.participant.last_result == 'extinction' %}
-    <div class="alert alert-danger" role="alert">
-        Extinction! One or more of your group drew the extinction outcome!
-    </div>
-
-    {% else %}
-        {% if not player.participant.game_extinct %}
-        <div class="alert alert-success" role="alert">
-            None of your group drew the extinction outcome.
-        </div>
-        {% endif %}
-    {% endif %}
-
+   
 
 
     {% if player.participant.game_extinct %}
         <div class="alert alert-danger" role="alert">
-            <p><strong>You are extinct!</strong> You will still need to continue playing the remaining rounds to get the base payment.
+            <p><strong>You are extinct!</strong> One of your group has drawn the extinction outcome. You will still need to continue playing the remaining rounds to get the base payment.
             However, you will not earn any bonus.</p>
+        </div>
+    {% else %}
+        <div class="alert alert-success" role="alert">
+            None of your group drew the extinction outcome.
         </div>
     {% endif %}
 
@@ -78,19 +70,15 @@
                 <p>You were selected to play the safe lottery.</p>
         {% endif %}
 
-            <p>Your result this round: 
-                {% if player.participant.last_result == '0' %}
             
-                +0p
+                {% if player.participant.last_result == '0' %}
+                <p>Your result this round: +0p</p>
             
         {% elif player.participant.last_result == '1' %}
-                +1p
+                <p>Your result this round: +1p</p>
             
         {% elif player.participant.last_result == '10' %}
-                +10p
-            
-        {% elif player.participant.last_result == 'extinction' %}
-                Extinction! One or more of your group drew the extinction outcome!
+                <p>Your result this round: +10p</p>
             
         {% endif %}
 

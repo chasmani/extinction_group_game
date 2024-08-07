@@ -63,7 +63,7 @@ class Player(BasePlayer):
     )
 
     optimal_comprehension = models.StringField(
-        label="The optimal number of risky lotteries is . . . ",
+        label="The strategy that should work best for the group is . . . ",
         choices=[
             ["8 and 40", "I personally play a total of 8 risky lotteries (~40 for the group)"], 
             ["1 to 2 and 8", "The group in total plays 8 risky lotteries (~1 to 2 for me personally)"], 
@@ -388,7 +388,7 @@ class ResultsWaitPage(WaitPage):
 
     @staticmethod
     def is_displayed(player):
-        return not player.participant.is_dropout
+        return not player.participant.is_dropout and player.participant.condition in ['group', 'voting']
 
 class GroupResult(Page):
 

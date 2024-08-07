@@ -38,15 +38,25 @@ class Player(BasePlayer):
 
     # Survey question
     optimal_belief = models.StringField(
-        label="Did you believe that the optimal strategy that we showed you was correct?",
-        choices=["Yes", "No", "I'm not sure"],
+        label="Did you believe that the optimal strategy that we showed you was correct, in terms of being the best strategy for the group?",
+        choices=["Yes", "No", "I'm Not Sure"],
         widget=widgets.RadioSelect,
         initial='')
+    
+    optimal_belief_text = models.LongStringField(
+        label='If you did not answer "Yes" above, please explain why.',
+        blank=True
+    )
+
+    free_text_box = models.LongStringField(
+        label="Please provide any additional feedback or comments about the experiment.",
+        blank=True
+    )
 
 class PostSurvey(Page):
 
     form_model = "player"
-    form_fields = ['optimal_belief']
+    form_fields = ['optimal_belief', 'optimal_belief_text', 'free_text_box']
 
     def is_displayed(player):
         return player.participant.information == "optimal"
