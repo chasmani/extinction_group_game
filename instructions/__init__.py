@@ -1,6 +1,7 @@
 from otree.api import *
 
 import time
+import random
 
 doc = """
 Your app description
@@ -117,18 +118,6 @@ def quiz_voting_error_message(player, value):
 		return 'That is not correct. Please try again.'
 
 
-class ConditionChoice(Page):
-	form_model = "player"
-	form_fields = ["condition_choice", "lottery_switch_choice"]
-
-	def is_displayed(player):
-		return "condition" not in player.participant.vars
-
-	def before_next_page(player, timeout_happened):
-		player.participant.vars['condition'] = player.condition_choice
-		player.participant.vars["switched"] = player.lottery_switch_choice == 'switched'
-		player.participant.wrong_answers = []
-
 
 class ConditionChoice(Page):
 
@@ -156,6 +145,8 @@ class ConditionChoice(Page):
 		elif condition_choice == 'voting_no_info':
 			player.participant.condition = 'voting'
 			player.participant.information = 'none'
+
+		player.participant.switched = random.choice([True, False])	
 
 		print("Instructions ConditionChoice: ", player.participant.vars)
 

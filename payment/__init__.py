@@ -59,7 +59,7 @@ class PostSurveyOptimal(Page):
     form_fields = ['optimal_belief', 'optimal_belief_text']
 
     def is_displayed(player):
-        if player.participant.condition in ["indy", "group"]:
+        if player.participant.condition in ["voting", "group"]:
             if player.participant.information == "optimal":
                 return True
         return False

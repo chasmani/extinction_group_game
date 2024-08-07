@@ -36,7 +36,7 @@ class C(BaseConstants):
     NAME_IN_URL = 'game_group'
     PLAYERS_PER_GROUP = None
     NUM_ROUNDS = 20
-    TIMEOUT_GROUPING = 1
+    TIMEOUT_GROUPING = 30
     TIMEOUT_CHOICE = 90
     TIMEOUT_INFO = 30
 
@@ -74,7 +74,7 @@ class Player(BasePlayer):
         )
     
     optimal_comprehension_indy = models.StringField(
-        label="If each player wants the group to play the optimal number of risky lotteries, how many risky lotteries should each player play?",
+        label="If each player wants the group to play the optimal number of risky lotteries, how many risky lotteries should each player play on average?",
         choices=[
             ["5 to 6", "Each player plays 5 to 6 risky lotteries over the entire game"], 
             ["1 to 2", "Each player plays 1 to 2 risky lotteries over the entire game"], 
@@ -142,10 +142,13 @@ def group_by_arrival_time_method(self, waiting_players):
             this_group = players_in_condition[:5]
             unique_group_id = np.random.randint(1000000000)
             # Randomly choose information condition
+
+            if "information" not in this_group[0].participant.vars:
+                info_condition = np.random.choice(["none", "optimal"])
+                for player in this_group:
+                    player.participant.information = info_condition
+
             for player in this_group:
-                
-                if "information" not in player.participant.vars:
-                    player.participant.information = np.random.choice(["none", "optimal"])
                 player.participant.unique_group_id = unique_group_id
                 
             return this_group
@@ -192,17 +195,14 @@ class ConditionChoice(Page):
     form_fields = ["condition_choice", "info_choice"]
 
     def is_displayed(player):
-        return False
+        
         return player.round_number == 1
 
     def before_next_page(player, timeout_happened):
 
-        group = player.group
-        players = group.get_players()
-
-        for player in players:
-            player.participant.condition = player.condition_choice
-            player.participant.information = player.info_choice
+        
+        player.participant.condition = player.condition_choice
+        player.participant.information = player.info_choice
 
 
 class OptimalChoices(Page):
@@ -317,7 +317,7 @@ def get_voting_result(group):
             player_votes.append(0)
 
     # Replace any None
-    player_votes = [np.random.randint(6) if i is None else i for i in player_votes]
+    player_votes = [np.random.randint(2) if i in [None, ''] else i for i in player_votes]
     player_votes.sort()
     risky_count = player_votes[2]
 
@@ -359,7 +359,9 @@ def get_results(group):
             else:
                 player_choices.append('safe')
         # Replace any None
-        player_choices = ['safe' if i is None else i for i in player_choices]
+        player_choices = ['safe' if i in [None, ''] else i for i in player_choices]
+
+        print(player_choices)
         
         for player in players:
             player.participant.risky_count = player_choices.count('risky')
@@ -376,20 +378,21 @@ def get_results(group):
 
         if player_choice == 'safe':
             if random_roll < 0.5:
-                player_results.append("0")
+                player_result = "0"
             else:
-                player_results.append("1")
+                player_result = "1"
                 group_bonus += 1
         
         if player_choice == 'risky':
             if random_roll < 0.475:
-                player_results.append("0")
+                player_result = "0"
             elif random_roll < 0.95:
-                player_results.append("10")
+                player_result = "10"
                 group_bonus += 10
             else:
-                player_results.append("extinction")
+                player_result = "extinction"
                 group_extinct = True
+        player_results.append(player_result)
 
     # Update player data
     if not group_extinct:
