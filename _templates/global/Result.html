@@ -29,8 +29,12 @@
 
     {% if player.participant.game_extinct %}
         <div class="alert alert-danger" role="alert">
-            <p><strong>You are extinct!</strong> One of your group has drawn the extinction outcome. You will still need to continue playing the remaining rounds to get the base payment.
+            {% if C.NAME_IN_URL == "practice_group" %}
+                    <p><strong>You are extinct!</strong> One of your group has drawn the extinction outcome. This is just a practice game. If this happens in the real game, then you will not earn any bonus, and you will still need to continue playing the remaining rounds to get the base payment.</p>
+            {% else %}
+                <p><strong>You are extinct!</strong> One of your group has drawn the extinction outcome. You will still need to continue playing the remaining rounds to get the base payment.
             However, you will not earn any bonus.</p>
+            {% endif %}
         </div>
     {% else %}
         <div class="alert alert-success" role="alert">
