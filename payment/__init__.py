@@ -48,12 +48,12 @@ class Player(BasePlayer):
     
     optimal_belief_text = models.LongStringField(
         label='Why did you believe that the optimal strategy was not correct? Please provide a brief explanation.',
-        blank=True
+        blank=False
     )
 
     free_text_box = models.LongStringField(
         label="Please provide any additional feedback or comments about the experiment.",
-        blank=True
+        blank=False
     )
 
 class PostSurveyOptimal(Page):

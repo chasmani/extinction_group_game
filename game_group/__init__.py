@@ -37,7 +37,7 @@ class C(BaseConstants):
 	PLAYERS_PER_GROUP = None
 	NUM_ROUNDS = 20
 	TIMEOUT_GROUPING = 420
-	TIMEOUT_CHOICE = 60
+	TIMEOUT_CHOICE = 90
 	TIMEOUT_INFO = 30
 
 class Subsession(BaseSubsession):
