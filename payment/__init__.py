@@ -41,7 +41,7 @@ class Player(BasePlayer):
 
     # Survey question
     optimal_belief = models.StringField(
-        label="Did you believe that the optimal strategy that we showed you was correct, in terms of being the best strategy for the group?",
+        label="Did you believe that the optimal strategy that we showed you was correct, in terms of being the best strategy for the group? Note that there are no right or wrong answers, and your answer to this question won't affect your payment in any way.",
         choices=["Yes", "No", "I'm Not Sure"],
         widget=widgets.RadioSelect,
         initial='')
