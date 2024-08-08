@@ -161,6 +161,7 @@ class GroupWaitPage(WaitPage):
 	body_text = """
 		<p>IT IS IMPORTANT THAT YOU KEEP THIS TAB ACTIVE.</p>
 		You may have to wait a few minutes while the other players in your group catch up.
+		Waiting more than 5 minutes? Try refreshing the page.
 		"""
 	
 	def is_displayed(player):
