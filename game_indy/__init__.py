@@ -26,7 +26,7 @@ def creating_session(subsession):
 class C(BaseConstants):
     NAME_IN_URL = 'game'
     PLAYERS_PER_GROUP = None
-    NUM_ROUNDS = 10
+    NUM_ROUNDS = 100
 
 class Subsession(BaseSubsession):
     pass
