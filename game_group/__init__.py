@@ -189,7 +189,7 @@ class GroupWaitPage(WaitPage):
 		print("Game_group wait page 1: " , player.participant.vars)
 		return player.round_number == 1 and player.participant.condition in ['group', 'voting']
 
-def expected_value_strategy(n_risky, group_balance = 0, n_rounds=100, p_survive=0.95, e_risky=5, e_safe = 0.5):
+def expected_value_strategy(n_risky, group_balance = 0, n_rounds=100, p_survive=0.95, e_risky=25, e_safe = 2.5):
 
 	return p_survive**n_risky * (group_balance + e_risky * n_risky + e_safe * (n_rounds - n_risky))
 
@@ -383,15 +383,15 @@ def get_results(group):
 			if random_roll < 0.5:
 				player_result = "0"
 			else:
-				player_result = "1"
-				group_bonus += 1
+				player_result = "5"
+				group_bonus += 5
 		
 		if player_choice == 'risky':
 			if random_roll < 0.475:
 				player_result = "0"
 			elif random_roll < 0.95:
-				player_result = "10"
-				group_bonus += 10
+				player_result = "50"
+				group_bonus += 50
 			else:
 				player_result = "extinction"
 				group_extinct = True
@@ -401,10 +401,10 @@ def get_results(group):
 	if not group_extinct:
 		for i, player in enumerate(players):
 			player_result = player_results[i]
-			if player_result == "1":
-				player.participant.game_current_bonus += 1
-			if player_result == "10":
-				player.participant.game_current_bonus += 10
+			if player_result == "5":
+				player.participant.game_current_bonus += 5
+			if player_result == "50":
+				player.participant.game_current_bonus += 50
 
 			player.participant.last_result = player_results[i]
 

@@ -21,14 +21,23 @@
         <p>Safe Lottery:</p>
 
         <ul>
-            <li>50% chance of winning 1p</li>
-            <li>50% chance of winning 0p</li>
+            {% if player.participant.condition == "indy" %}
+                <li>50% chance of winning 1p</li>
+            {% else %}
+                <li>50% chance of winning 5p</li>
+            {% endif %}
+                <li>50% chance of winning 0p</li>
         </ul>
        
         <p>Risky Lottery:</p>
         
         <ul>
-            <li>47.5% chance of winning 10p</li>
+            
+            {% if player.participant.condition == "indy" %}
+                <li>47.5% chance of winning 10p</li>
+            {% else %}
+                <li>47.5% chance of winning 50p</li>
+            {% endif %}
             <li>47.5% chance of winning 0p</li>
             <li>5% chance of <strong>extinction</strong></li>
         </ul>

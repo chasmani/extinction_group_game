@@ -15,14 +15,14 @@
             +0p
         </div>
 
-    {% elif player.participant.last_result == '1' %}
+    {% elif player.participant.last_result == '5' %}
         <div class="alert alert-success" role="alert">
-            +1p
+            +5p
         </div>
 
-    {% elif player.participant.last_result == '10' %}
+    {% elif player.participant.last_result == '50' %}
         <div class="alert alert-success" role="alert">
-            +10p
+            +50p
         </div>
         
     {% endif %}
@@ -70,11 +70,11 @@
                 {% if player.participant.last_result == '0' %}
                 <p>Your result this round: +0p</p>
             
-        {% elif player.participant.last_result == '1' %}
-                <p>Your result this round: +1p</p>
+        {% elif player.participant.last_result == '5' %}
+                <p>Your result this round: +5p</p>
             
-        {% elif player.participant.last_result == '10' %}
-                <p>Your result this round: +10p</p>
+        {% elif player.participant.last_result == '50' %}
+                <p>Your result this round: +50p</p>
             
         {% endif %}
 
