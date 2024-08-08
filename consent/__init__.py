@@ -78,6 +78,7 @@ class ParticipantConsent(Page):
 			player.participant.condition = player.session.config["condition"]
 		else:
 			random_draw = random.random()
+			print(random_draw)
 			if random_draw < 0.2:
 				player.participant.vars['condition'] = 'indy'
 			elif random_draw < 0.6:
