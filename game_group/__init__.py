@@ -35,8 +35,8 @@ def creating_session(subsession):
 class C(BaseConstants):
 	NAME_IN_URL = 'game_group'
 	PLAYERS_PER_GROUP = None
-	NUM_ROUNDS = 20
-	TIMEOUT_GROUPING = 420
+	NUM_ROUNDS = 5
+	TIMEOUT_GROUPING = 1
 	TIMEOUT_CHOICE = 90
 	TIMEOUT_INFO = 30
 
