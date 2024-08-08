@@ -85,32 +85,10 @@ class Player(BasePlayer):
 		initial=''
 		)
 
-	condition_choice = models.StringField(
-		label="Please choose the condition you would like to play in.",
-		choices=[
-			['group', 'Group with Independent Choices'],
-			['voting', 'Group with Median Voting'],
-		],
-		widget=widgets.RadioSelect
-	)
-
-	info_choice = models.StringField(
-		label="Please choose the information condition you would like to play in.",
-		choices=[
-			['none', 'No Information'],
-			['optimal', 'Optimal Information'],
-		],
-		widget=widgets.RadioSelect
-	)
-
-	lottery_switch_choice = models.StringField(
-		label="Which way round do you want to see the lotteries?",
-		choices=[
-			['not_switched', 'Risky Left, Safe Right'],
-			['switched', 'Safe Left, Risky Right']
-		],
-		widget=widgets.RadioSelect
-	)
+	lottery_result = models.StringField()
+	game_current_bonus = models.IntegerField()
+	game_extinct = models.BooleanField()
+	game_current_group_bonus = models.IntegerField()
 
 def optimal_comprehension_group_error_message(player, value):
 	if value != '8':
@@ -364,8 +342,6 @@ def get_results(group):
 		# Replace any None
 		player_choices = ['safe' if i in [None, ''] else i for i in player_choices]
 
-		print(player_choices)
-		
 		for player in players:
 			player.participant.risky_count = player_choices.count('risky')
 
@@ -416,6 +392,12 @@ def get_results(group):
 			player.participant.game_current_bonus = 0
 			player.participant.game_current_group_bonus = 0
 			player.participant.last_result = "extinction"
+
+	for player in players:
+		player.lottery_result = player.participant.last_result
+		player.game_current_bonus = player.participant.game_current_bonus
+		player.game_extinct = player.participant.game_extinct
+		player.game_current_group_bonus = player.participant.game_current_group_bonus
 
 			
 class ResultsWaitPage(WaitPage):   
