@@ -2,11 +2,6 @@ from os import environ
 
 SESSION_CONFIGS = [
     dict(
-        name='game_individual',
-        app_sequence=['game_indy'],
-        num_demo_participants=5,
-    ),
-    dict(
         name='instuctions',
         app_sequence=['instructions'],
         num_demo_participants=5,
@@ -28,11 +23,11 @@ SESSION_CONFIGS = [
     ),
     dict(
         name="full_experiment",
-        app_sequence=['consent', 'instructions', 'practice_indy', 'practice_group', 'game_indy', 'game_group', 'payment'],
+        app_sequence=['consent', 'instructions', 'practice_group', 'game_group', 'payment'],
         num_demo_participants=10,
     ),
     dict(name="full_experiment_voting_with_info",
-        app_sequence=['consent', 'instructions', 'practice_indy', 'practice_group', 'game_indy', 'game_group', 'payment'],
+        app_sequence=['consent', 'instructions', 'practice_group', 'game_group', 'payment'],
         num_demo_participants=10,
         condition="voting",
         information="optimal"

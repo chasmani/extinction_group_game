@@ -117,8 +117,6 @@ def quiz_voting_error_message(player, value):
 		player.participant.wrong_answers.append('quiz_voting')
 		return 'That is not correct. Please try again.'
 
-
-
 class ConditionChoice(Page):
 
 	form_model = "player"
