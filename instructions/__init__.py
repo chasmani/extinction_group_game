@@ -46,7 +46,7 @@ class Player(BasePlayer):
 	)
 
 	quiz_group_extinction = models.StringField(
-		label="What happens if one of the players draws the extinction outcome in the risky lottery?",
+		label="What happens if the extinction outcome is drawn in arisky lottery?",
 		choices=[
 			['extinct_none', 'Nothing.'],
 			['extinct_one', 'Only the player who drew the extinction outcome will go extinct.'],

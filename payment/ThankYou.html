@@ -8,7 +8,7 @@
 {{ block content }}
   <p>Thank you for playing.</p>
 
-  {% if player.participant.game_current_bonus > 0 %}
+  {% if player.participant.game_current_bonus > 0 and not player.participant.is_dropout %}
     <p>You earned a bonus payment of {{ player.participant.game_current_bonus }}p, which will be paid through prolific.</p>
   {% endif %}
 
