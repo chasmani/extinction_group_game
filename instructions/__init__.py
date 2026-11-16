@@ -58,7 +58,7 @@ class Player(BasePlayer):
 	)
 
 	quiz_voting = models.StringField(
-		label="How is the group decision made for how many players will play the risky lottery?",
+		label="How is the group decision made for how many risky lotteries to play?",
 		choices=[
 			['voting_median', 'The group decision is the middle value of the ordered votes.'],
 			['voting_random', 'The group decision is randomly chosen.'],

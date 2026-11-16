@@ -10,23 +10,7 @@
     <div class="col-md-6 offset-md-3">
 
     <h4>Your Outcome</h4>
-    {% if player.participant.last_result == '0' %}
-        <div class="alert alert-secondary" role="alert">
-            +0p
-        </div>
-
-    {% elif player.participant.last_result == '5' %}
-        <div class="alert alert-success" role="alert">
-            +5p
-        </div>
-
-    {% elif player.participant.last_result == '50' %}
-        <div class="alert alert-success" role="alert">
-            +50p
-        </div>
-        
-    {% endif %}
-
+    
     {% if player.participant.game_extinct %}
         <div class="alert alert-danger" role="alert">
             {% if C.NAME_IN_URL == "practice_group" %}
@@ -40,6 +24,18 @@
         <div class="alert alert-success" role="alert">
             None of your group drew the extinction outcome.
         </div>
+
+        {% if player.participant.last_result == 0 %}
+        <div class="alert alert-secondary" role="alert">
+            +0p
+        </div>
+
+        {% else %}
+            <div class="alert alert-success" role="alert">
+                +{{ player.participant.last_result}}p
+            </div>
+        {% endif %}
+
     {% endif %}
 
     {% if player.participant.condition == "group" %}
@@ -53,35 +49,30 @@
     </ul>
     <p>(You chose {{ player.lottery_action }}).</p>
 
+    {% if player.participant.game_extinct %} 
+            <p>Your group is extinct, so no bonus was earned this round</p>
+    {% endif %}
+
     {% elif player.participant.condition == "voting" %}
 
         <h4>Group Votes</h4>
 
-        <p>Each of the players in your group voted for how many players they wanted to play the risky lottery.</p>
+        <p>Each of the players in your group voted for how many risky lotteries they wanted the group to play.</p>
 
-        <p>Your group voted (including you): {{ player_votes }}. <p>(You chose {{ player.voter_decision }})</p>As a result the computer randomly selected players to play the following lotteries:</p>
+        <p>Your group voted (including you): {{ player_votes }}. <p>(You chose {{ player.voter_decision }})</p>As a result the group played the following lotteries:</p>
         <ul>
             <li>Risky lottery count: {{ risky_count }} </li>
             <li>Safe lottery count: {{ safe_count }} </li>
         </ul>   
-        {% if player.lottery_action == "risky" %}
-                <p>You were selected to play the risky lottery.</p>
+
+        {% if player.participant.game_extinct %} 
+            <p>Your group is extinct, so no bonus was earned this round</p>
         {% else %}
-                <p>You were selected to play the safe lottery.</p>
+            <p>The results of the lotteries were shared equally between the group.</p>
+            <p>The group's total winnings this round: {{ player.participant.group_last_result }}p.</p>
+            <p>Your share: {{ player.participant.last_result }}p was added to your bonus.</p>
         {% endif %}
-
-            
-                {% if player.participant.last_result == '0' %}
-                <p>Your result this round: +0p</p>
-            
-        {% elif player.participant.last_result == '5' %}
-                <p>Your result this round: +5p</p>
-            
-        {% elif player.participant.last_result == '50' %}
-                <p>Your result this round: +50p</p>
-            
-        {% endif %}
-
+        
     {% endif %}
 
     {% if C.NAME_IN_URL == "practice_group" %}

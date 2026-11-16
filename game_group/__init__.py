@@ -57,7 +57,7 @@ class Player(BasePlayer):
 	)
 
 	voter_decision = models.IntegerField(
-		label="Please vote for how many players you would like to play the risky lottery this round.",
+		label="Please vote for how many risky lotteries you want the group to play this round.",
 		choices=[0,1,2,3,4,5],
 		widget=widgets.RadioSelect
 	)
@@ -72,20 +72,8 @@ class Player(BasePlayer):
 		widget=widgets.RadioSelect,
 		initial=''
 		)
-	
-	optimal_comprehension_indy = models.StringField(
-		label="If each player wants the group to play the optimal number of risky lotteries, how many risky lotteries should each player play on average?",
-		choices=[
-			["5 to 6", "Each player plays 5 to 6 risky lotteries over the entire game"], 
-			["1 to 2", "Each player plays 1 to 2 risky lotteries over the entire game"], 
-			["0 to 1", "Each player plays 0 to 1 risky lotteries over the entire game"],
-			["0", "Each player plays 0 risky lotteries over the entire game"],
-		],
-		widget=widgets.RadioSelect,
-		initial=''
-		)
 
-	lottery_result = models.StringField()
+	lottery_result = models.IntegerField()
 	game_current_bonus = models.IntegerField()
 	game_extinct = models.BooleanField()
 	game_current_group_bonus = models.IntegerField()
@@ -95,11 +83,6 @@ def optimal_comprehension_group_error_message(player, value):
 		player.participant.wrong_answers.append('optimal_comprehension_group')
 		return 'That is not correct. Please try again.'
 	
-def optimal_comprehension_indy_error_message(player, value):
-	if value != '1 to 2':
-		player.participant.wrong_answers.append('optimal_comprehension_indy')
-		return 'That is not correct. Please try again.'
-
 def group_by_arrival_time_method(self, waiting_players):
 
 	for player in waiting_players:
@@ -208,7 +191,7 @@ class OptimalChoices(Page):
 	timeout_seconds = C.TIMEOUT_CHOICE * 2
 
 	form_model = 'player'
-	form_fields = ['optimal_comprehension_group', 'optimal_comprehension_indy']
+	form_fields = ['optimal_comprehension_group']
 
 	def is_displayed(player):
 		
@@ -328,12 +311,12 @@ def get_results(group):
 
 	players = group.get_players()
 
-	# If voting
-	if players[0].participant.condition == 'voting':
+	condition = players[0].participant.condition
+
+	if condition == "voting":
 		player_choices = get_voting_result(group)
 
-	# If group  
-	if players[0].participant.condition == 'group':
+	if condition == "group":
 		player_choices = [player.field_maybe_none('lottery_action') for player in players]
 		while len(player_choices) < 5:
 			if np.random.random() < 0.08:
@@ -378,21 +361,24 @@ def get_results(group):
 	if not group_extinct:
 		for i, player in enumerate(players):
 			player_result = player_results[i]
-			if player_result == "5":
-				player.participant.game_current_bonus += 5
-			if player_result == "50":
-				player.participant.game_current_bonus += 50
-
-			player.participant.last_result = player_results[i]
-
-			player.participant.game_current_group_bonus += group_bonus
+			if condition == "voting":
+				player.participant.game_current_bonus += group_bonus // 5
+				player.participant.last_result = group_bonus // 5
+				player.participant.game_current_group_bonus += group_bonus
+				player.participant.group_last_result = group_bonus
+			else:
+				player.participant.game_current_bonus += int(player_result)
+				player.participant.last_result = int(player_result)
+				player.participant.game_current_group_bonus += group_bonus
+				player.participant.group_last_result = group_bonus
 
 	if group_extinct:
 		for player in players:
 			player.participant.game_extinct = True
 			player.participant.game_current_bonus = 0
 			player.participant.game_current_group_bonus = 0
-			player.participant.last_result = "extinction"
+			player.participant.last_result = 0
+			player.participant.group_last_result = 0
 
 	for player in players:
 		player.lottery_result = player.participant.last_result

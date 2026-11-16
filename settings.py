@@ -23,11 +23,11 @@ SESSION_CONFIGS = [
     ),
     dict(
         name="full_experiment",
-        app_sequence=['consent', 'instructions', 'practice_group', 'game_group', 'payment'],
+        app_sequence=['consent', 'instructions', 'practice_group', 'practice_indy', 'game_group', 'game_indy', 'payment'],
         num_demo_participants=10,
     ),
     dict(name="full_experiment_voting_with_info",
-        app_sequence=['consent', 'instructions', 'practice_group', 'game_group', 'payment'],
+        app_sequence=['consent', 'instructions', 'practice_group', 'practice_indy', 'game_group', 'game_indy', 'payment'],
         num_demo_participants=10,
         condition="voting",
         information="optimal"
@@ -50,6 +50,7 @@ PARTICIPANT_FIELDS = [
     "practice_current_group_bonus",
     "game_current_group_bonus",
     "last_result",
+    "group_last_result",
     "condition",
     "information",
     "wrong_answers",

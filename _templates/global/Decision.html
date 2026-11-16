@@ -17,7 +17,7 @@
                 <div class="col-md-6">
                         <div class="alert alert-danger" role="alert">
                             <p><strong>You are extinct!</strong> You will still need to continue playing the remaining rounds to get the base payment.
-                            However, you will not earn the bonus.</p>
+                            However, you will not earn any bonus.</p>
                         </div>
                     </div>
                 {% else %}
@@ -26,7 +26,7 @@
                 </div>
                 <div class="col-md-3 group-info">
                     <div>
-                        <h4>Group Current Bonus</h4>
+                        <h4>Group Total Winnings</h4>
                         <h2>{{ player.participant.game_current_group_bonus }}p</h2>
                     </div>
                 </div>
@@ -67,16 +67,11 @@
             <div class="col-md-8 offset-md-2">
             
                 <h4>Optimal Group Strategy Update</h4>
-                <h5>Note: The optimal strategy was updated based on the group bonus so far.</h5>
+                <h5>Note: The optimal strategy was updated based on the total group winnings so far.</h5>
 
                 <div class="col-md-4 optimal-info">
             
                     <p class="margin-h2"><h2>{{ optimal_n_risky }}</h2> total risky lotteries for the group over the rest of the game.</p>
-                </div>
-                <div class="col-md-4 optimal-info">
-            
-                <p class="margin-h2"><h2>{{ optimal_n_risky_per_player }}</h2> risky lotteries per player over the rest of the game.</p>
-                
                 </div>
                 </div>
                 </div>

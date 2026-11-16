@@ -51,6 +51,11 @@ class Player(BasePlayer):
         blank=False
     )
 
+    strategy_question = models.LongStringField(
+        label="What choice did you usually make, and why?",
+        blank=False
+    )
+
     free_text_box = models.LongStringField(
         label="Please provide any additional feedback or comments about the experiment.",
         blank=False
@@ -82,10 +87,10 @@ class PostSurveyOptimal2(Page):
 class PostSurvey(Page):
 
     form_model = "player"
-    form_fields = ['free_text_box']
+    form_fields = ['strategy_question', 'free_text_box']
 
 
 class ThankYou(Page):
     pass
 
-page_sequence = [PostSurveyOptimal, PostSurveyOptimal2, PostSurvey, ThankYou]
+page_sequence = [PostSurvey, PostSurveyOptimal, PostSurveyOptimal2, ThankYou]

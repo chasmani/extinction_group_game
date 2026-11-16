@@ -79,7 +79,9 @@ class ParticipantConsent(Page):
 		else:
 			random_draw = random.random()
 			print(random_draw)
-			if random_draw < 0.5:
+			if random_draw < 0.2:
+				player.participant.vars['condition'] = 'indy'
+			elif random_draw < 0.6:
 				player.participant.vars['condition'] = 'group'
 			else:
 				player.participant.vars['condition'] = 'voting'

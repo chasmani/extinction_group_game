@@ -59,12 +59,12 @@ class Player(BasePlayer):
 	)
 
 	voter_decision = models.IntegerField(
-		label="Please vote for how many players you would like to play the risky lottery this round.",
+		label="Please vote for how many risky lotteries you want the group to play this round.",
 		choices=[0,1,2,3,4,5],
 		widget=widgets.RadioSelect
 	)
 
-	lottery_result = models.StringField()
+	lottery_result = models.IntegerField()
 	game_current_bonus = models.IntegerField()
 	game_extinct = models.BooleanField()
 	game_current_group_bonus = models.IntegerField()
