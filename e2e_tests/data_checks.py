@@ -71,6 +71,30 @@ def find_condition_and_bonus_problems(bots):
     return problems
 
 
+HONEYPOT_COLUMN = "consent.1.player.further_details"
+
+
+def honeypot_caught(bot):
+    return bool(bot.server_record.get(HONEYPOT_COLUMN))
+
+
+def find_honeypot_problems(bots):
+    """The honeypot should catch exactly the bots that fill in every text box, and nobody else."""
+    bots_with_records = [bot for bot in bots if bot.server_record is not None]
+    if not bots_with_records:
+        return []
+    if HONEYPOT_COLUMN not in bots_with_records[0].server_record:
+        return [f"The export has no honeypot column ({HONEYPOT_COLUMN}). Is the honeypot deployed on this server?"]
+
+    problems = []
+    for bot in bots_with_records:
+        if bot.fills_in_every_text_box and not honeypot_caught(bot):
+            problems.append(f"{bot.name} fills in every text box, but the honeypot did not catch it.")
+        if honeypot_caught(bot) and not bot.fills_in_every_text_box:
+            problems.append(f"{bot.name} played like a normal participant, but the honeypot flagged it.")
+    return problems
+
+
 def find_median_vote_problems(bots):
     """In a full voting group with no dropouts, the number of risky lotteries played each round
     should be the middle value of the five votes the bots cast."""

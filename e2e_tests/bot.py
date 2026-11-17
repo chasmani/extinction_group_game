@@ -53,11 +53,13 @@ class BotGotStuck(Exception):
 
 class Bot:
 
-    def __init__(self, name, page, action_delay_seconds, dropout_plan=None):
+    def __init__(self, name, page, action_delay_seconds, dropout_plan=None, fills_in_every_text_box=False):
         self.name = name
         self.page = page
         self.action_delay_seconds = action_delay_seconds
         self.dropout_plan = dropout_plan
+        # A crude form-filling bot: types into any text box it finds. The experiment's honeypot should catch it.
+        self.fills_in_every_text_box = fills_in_every_text_box
 
         self.condition = None
         self.saw_optimal_strategy = False
@@ -123,6 +125,8 @@ class Bot:
             answers = what_to_do(await self.page.content())
             for field_name, value in answers.items():
                 await self.fill_field(field_name, value)
+            if self.fills_in_every_text_box:
+                await self.fill_in_every_empty_text_box()
             await self.page.click(".otree-btn-next")
         await self.wait_until_page_changes(url_path, SECONDS_TO_WAIT_FOR_NEXT_PAGE)
         self.pages_completed += 1
@@ -162,6 +166,13 @@ class Bot:
             await self.page.check(f'input[name="{field_name}"][value="{value}"]')
         else:
             await field.fill(value)
+
+    async def fill_in_every_empty_text_box(self):
+        text_boxes = self.page.locator('input[type="text"], textarea')
+        for index in range(await text_boxes.count()):
+            text_box = text_boxes.nth(index)
+            if await text_box.input_value() == "":
+                await text_box.fill("filled in by a form-filling bot")
 
     async def press_key_for_lottery(self, lottery):
         """Individual game: F picks the left lottery, J the right. Which side is risky varies by participant."""

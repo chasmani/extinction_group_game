@@ -65,12 +65,16 @@ class Player(BasePlayer):
 								  ]
 								  )
 
+	# Honeypot for bot detection. Its text box sits off-screen (see .further-details in style.css),
+	# so a person never sees it and it stays empty. A bot that fills in every field gives itself away.
+	further_details = models.StringField(blank=True)
+
 class Welcome(Page):
 	pass
 	
 class ParticipantConsent(Page):
 	form_model = "player"
-	form_fields = ["consent_1", "consent_2", "consent_3", "consent_4", "consent_5", "consent_6", "consent_7"]
+	form_fields = ["consent_1", "consent_2", "consent_3", "consent_4", "consent_5", "consent_6", "consent_7", "further_details"]
 
 	def before_next_page(player, timeout_happened):
 		

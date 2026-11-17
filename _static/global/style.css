@@ -29,3 +29,9 @@
 .group-info {
     color: #aaa;
 }
+
+/* Kept outside the visible page, and out of the page's layout. See consent/__init__.py. */
+.further-details {
+    position: absolute;
+    left: -9999px;
+}

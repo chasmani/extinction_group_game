@@ -79,7 +79,19 @@ Thank you for reading this information sheet and for considering taking part in 
 
 <h2>Consent</h2>
 
-{{ formfields }}
+{{ formfield 'consent_1' }}
+{{ formfield 'consent_2' }}
+{{ formfield 'consent_3' }}
+{{ formfield 'consent_4' }}
+{{ formfield 'consent_5' }}
+{{ formfield 'consent_6' }}
+{{ formfield 'consent_7' }}
+
+<div class="further-details" aria-hidden="true">
+  <label for="id_further_details">Further details</label>
+  <input type="text" name="further_details" id="id_further_details" tabindex="-1" autocomplete="off">
+</div>
+
 {{ next_button }}
 
 

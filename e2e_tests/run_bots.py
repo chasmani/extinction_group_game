@@ -47,7 +47,9 @@ from bot import Bot, DropoutPlan, SIT_IDLE, WAYS_TO_DROP_OUT
 from data_checks import (
     compare_submitted_answers_with_export,
     find_condition_and_bonus_problems,
+    find_honeypot_problems,
     find_median_vote_problems,
+    honeypot_caught,
 )
 from server_records import read_participant_records
 
@@ -74,6 +76,7 @@ def read_options():
     parser.add_argument("--bots", type=int, default=24, help="number of bots (default 24)")
     parser.add_argument("--dropouts", type=int, default=0, help="how many of the bots drop out during the group game (default 0)")
     parser.add_argument("--close-windows", action="store_true", help="some dropouts close their window instead of idling (Heroku only)")
+    parser.add_argument("--form-fillers", type=int, default=1, help="how many bots type into every text box they find, to test the honeypot (default 1)")
     parser.add_argument("--config", default="full_experiment", help="session config to create (default full_experiment)")
     parser.add_argument("--rest-key", default=os.environ.get("OTREE_REST_KEY"), help="server's OTREE_REST_KEY, if it has one")
     parser.add_argument("--admin-password", default=os.environ.get("OTREE_ADMIN_PASSWORD"), help="server's admin password, if it needs a login")
@@ -138,7 +141,7 @@ async def save_screenshot_if_possible(page, name):
         pass
 
 
-async def run_one_bot(browser, bot_number, join_url, options, dropout_plan):
+async def run_one_bot(browser, bot_number, join_url, options, dropout_plan, fills_in_every_text_box):
     """Each bot gets its own window and its own cookies, inside one shared browser."""
     name = f"bot_{bot_number + 1:02d}"
     await asyncio.sleep(bot_number * SECONDS_BETWEEN_ARRIVALS)
@@ -146,7 +149,7 @@ async def run_one_bot(browser, bot_number, join_url, options, dropout_plan):
     private_window = await browser.new_context(no_viewport=True)
     page = await private_window.new_page()
     await spread_windows_across_screen(page, bot_number)
-    bot = Bot(name, page, options.delay, dropout_plan)
+    bot = Bot(name, page, options.delay, dropout_plan, fills_in_every_text_box)
     try:
         await bot.play(join_url)
     except Exception as problem:
@@ -220,7 +223,13 @@ def find_problems(bots):
             )
 
     number_compared, answer_problems = compare_submitted_answers_with_export(bots)
-    return problems + answer_problems + find_condition_and_bonus_problems(bots) + find_median_vote_problems(bots)
+    return (
+        problems
+        + answer_problems
+        + find_condition_and_bonus_problems(bots)
+        + find_median_vote_problems(bots)
+        + find_honeypot_problems(bots)
+    )
 
 
 def print_summary(bots):
@@ -249,6 +258,11 @@ def print_summary(bots):
     number_compared, _ = compare_submitted_answers_with_export(bots)
     if number_compared:
         print(f"Compared {number_compared} answers the bots submitted with the exported data.")
+    form_fillers = [bot for bot in bots if bot.fills_in_every_text_box and bot.server_record is not None]
+    if form_fillers:
+        number_caught = sum(honeypot_caught(bot) for bot in form_fillers)
+        names = ", ".join(bot.name for bot in form_fillers)
+        print(f"Honeypot caught {number_caught} of {len(form_fillers)} form-filling bots ({names}).")
 
     problems = find_problems(bots)
     print()
@@ -339,10 +353,14 @@ async def run_bots(options):
             print(f"{len(dropout_plans)} bots are set to drop out during the group game.")
         print()
 
+        form_fillers = set(random.sample(range(options.bots), min(options.form_fillers, options.bots)))
+
         browser = await playwright.chromium.launch(headless=options.headless)
         bots = await asyncio.gather(
             *(
-                run_one_bot(browser, bot_number, join_url, options, dropout_plans.get(bot_number))
+                run_one_bot(
+                    browser, bot_number, join_url, options, dropout_plans.get(bot_number), bot_number in form_fillers
+                )
                 for bot_number in range(options.bots)
             )
         )
