@@ -44,6 +44,11 @@ from urllib.parse import urlparse
 from playwright.async_api import async_playwright
 
 from bot import Bot, DropoutPlan, SIT_IDLE, WAYS_TO_DROP_OUT
+from data_checks import (
+    compare_submitted_answers_with_export,
+    find_condition_and_bonus_problems,
+    find_median_vote_problems,
+)
 from server_records import read_participant_records
 
 OUTPUT_FOLDER = Path(__file__).parent / "output"
@@ -213,7 +218,9 @@ def find_problems(bots):
             problems.append(
                 f"{bot.name} closed its window, but the server left it in {app_on_server} instead of moving it on to the final survey."
             )
-    return problems
+
+    number_compared, answer_problems = compare_submitted_answers_with_export(bots)
+    return problems + answer_problems + find_condition_and_bonus_problems(bots) + find_median_vote_problems(bots)
 
 
 def print_summary(bots):
@@ -239,6 +246,9 @@ def print_summary(bots):
     print()
     print_extinction_counts(bots)
     print(f"{sum(bot.finished for bot in bots)} of {len(bots)} bots reached the Thank You page.")
+    number_compared, _ = compare_submitted_answers_with_export(bots)
+    if number_compared:
+        print(f"Compared {number_compared} answers the bots submitted with the exported data.")
 
     problems = find_problems(bots)
     print()

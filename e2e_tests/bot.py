@@ -11,6 +11,7 @@ import asyncio
 import random
 import re
 import time
+from collections import Counter, defaultdict
 from dataclasses import dataclass
 from urllib.parse import urlparse
 
@@ -61,6 +62,8 @@ class Bot:
         self.condition = None
         self.saw_optimal_strategy = False
         self.pages_completed = 0
+        self.times_seen = Counter()                  # (app, page) -> how many times this bot has been shown it
+        self.submitted_answers = defaultdict(dict)   # (app, round number) -> {field name: value the bot submitted}
         self.game_round = 0
         self.bonus_pence = None
         self.finished = False
@@ -99,7 +102,11 @@ class Bot:
             await self.wait_until_page_changes(url_path, SECONDS_TO_WAIT_ON_WAIT_PAGE)
             return
 
-        how_to_drop_out_now = self.how_to_drop_out_on_this_page(app_and_page)
+        # Each page is shown at most once per round, so the number of times we have seen it is the round number.
+        self.times_seen[app_and_page] += 1
+        round_number = self.times_seen[app_and_page]
+
+        how_to_drop_out_now = self.how_to_drop_out_on_this_page(app_and_page, round_number)
         if how_to_drop_out_now == SIT_IDLE:
             await self.sit_idle_until_removed(url_path)
             return
@@ -109,7 +116,9 @@ class Bot:
 
         await self.pause_like_a_person()
         if what_to_do == KEYBOARD_PAGE:
-            await self.press_key_for_lottery(choose_lottery())
+            lottery = choose_lottery()
+            await self.press_key_for_lottery(lottery)
+            answers = {"lottery_decision": lottery}
         else:
             answers = what_to_do(await self.page.content())
             for field_name, value in answers.items():
@@ -117,15 +126,17 @@ class Bot:
             await self.page.click(".otree-btn-next")
         await self.wait_until_page_changes(url_path, SECONDS_TO_WAIT_FOR_NEXT_PAGE)
         self.pages_completed += 1
+        app = app_and_page[0]
+        self.submitted_answers[(app, round_number)].update(answers)
 
         if how_to_drop_out_now == QUIT_AFTER_DECIDING:
             self.close_window_for_good()
 
-    def how_to_drop_out_on_this_page(self, app_and_page):
+    def how_to_drop_out_on_this_page(self, app_and_page, round_number):
         """Returns one of WAYS_TO_DROP_OUT if this is the planned moment, otherwise None."""
         if app_and_page not in REAL_GROUP_GAME_DECISION_PAGES:
             return None
-        self.game_round += 1
+        self.game_round = round_number
         is_planned_round = self.dropout_plan is not None and self.game_round == self.dropout_plan.round_number
         return self.dropout_plan.how if is_planned_round else None
 
