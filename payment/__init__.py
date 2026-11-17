@@ -52,7 +52,7 @@ class Player(BasePlayer):
     )
 
     strategy_question = models.LongStringField(
-        label="What choice did you usually make, and why?",
+        label="What was your strategy, and why?",
         blank=False
     )
 
