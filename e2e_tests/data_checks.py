@@ -5,7 +5,7 @@ in the session's data export, and also check a few things the analysis and the
 bonus payments will depend on.
 """
 
-from collections import defaultdict
+from collections import Counter, defaultdict
 
 # The app name in a page's address is not always the app's folder name, which is what the export uses.
 EXPORT_NAME_OF_APP = {"practice": "practice_indy", "game": "game_indy"}
@@ -78,20 +78,37 @@ def honeypot_caught(bot):
     return bool(bot.server_record.get(HONEYPOT_COLUMN))
 
 
+def marked_to_play_alone_by_honeypot(bot):
+    """The experiment puts 'honeypot' in the participant's wrong_answers, which keeps them out of real groups."""
+    return "honeypot" in bot.server_record.get("participant.wrong_answers", "")
+
+
 def find_honeypot_problems(bots):
-    """The honeypot should catch exactly the bots that fill in every text box, and nobody else."""
+    """The honeypot should catch exactly the bots that fill in every text box, and send them on alone."""
     bots_with_records = [bot for bot in bots if bot.server_record is not None]
     if not bots_with_records:
         return []
     if HONEYPOT_COLUMN not in bots_with_records[0].server_record:
         return [f"The export has no honeypot column ({HONEYPOT_COLUMN}). Is the honeypot deployed on this server?"]
 
+    bots_in_group = Counter(bot.server_record.get("participant.unique_group_id") for bot in bots_with_records)
     problems = []
     for bot in bots_with_records:
-        if bot.fills_in_every_text_box and not honeypot_caught(bot):
-            problems.append(f"{bot.name} fills in every text box, but the honeypot did not catch it.")
         if honeypot_caught(bot) and not bot.fills_in_every_text_box:
             problems.append(f"{bot.name} played like a normal participant, but the honeypot flagged it.")
+        if marked_to_play_alone_by_honeypot(bot) and not bot.fills_in_every_text_box:
+            problems.append(f"{bot.name} played like a normal participant, but was marked to play alone by the honeypot.")
+        if not bot.fills_in_every_text_box:
+            continue
+
+        if not honeypot_caught(bot):
+            problems.append(f"{bot.name} fills in every text box, but the honeypot did not catch it.")
+            continue
+        if not marked_to_play_alone_by_honeypot(bot):
+            problems.append(f"{bot.name} was caught by the honeypot, but was not marked to play alone.")
+        group_id = bot.server_record.get("participant.unique_group_id")
+        if group_id and bots_in_group[group_id] > 1:
+            problems.append(f"{bot.name} was caught by the honeypot, but still played in a group with other bots.")
     return problems
 
 

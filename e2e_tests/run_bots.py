@@ -50,6 +50,7 @@ from data_checks import (
     find_honeypot_problems,
     find_median_vote_problems,
     honeypot_caught,
+    marked_to_play_alone_by_honeypot,
 )
 from server_records import read_participant_records
 
@@ -261,8 +262,12 @@ def print_summary(bots):
     form_fillers = [bot for bot in bots if bot.fills_in_every_text_box and bot.server_record is not None]
     if form_fillers:
         number_caught = sum(honeypot_caught(bot) for bot in form_fillers)
+        number_sent_alone = sum(marked_to_play_alone_by_honeypot(bot) for bot in form_fillers)
         names = ", ".join(bot.name for bot in form_fillers)
-        print(f"Honeypot caught {number_caught} of {len(form_fillers)} form-filling bots ({names}).")
+        print(
+            f"Honeypot caught {number_caught} of {len(form_fillers)} form-filling bots ({names}), "
+            f"and marked {number_sent_alone} to play alone."
+        )
 
     problems = find_problems(bots)
     print()

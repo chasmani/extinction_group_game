@@ -4,12 +4,6 @@ FULL_EXPERIMENT = ['consent', 'instructions', 'practice_group', 'practice_indy',
 
 SESSION_CONFIGS = [
     dict(
-        name='full_experiment',
-        display_name='Full experiment, random assignment (for testing)',
-        app_sequence=FULL_EXPERIMENT,
-        num_demo_participants=10,
-    ),
-    dict(
         name='demo_individual',
         display_name='Individual',
         app_sequence=FULL_EXPERIMENT,
@@ -47,6 +41,12 @@ SESSION_CONFIGS = [
         num_demo_participants=5,
         condition='voting',
         information='optimal',
+    ),
+    dict(
+        name='full_experiment',
+        display_name='Full experiment, random assignment',
+        app_sequence=FULL_EXPERIMENT,
+        num_demo_participants=10,
     ),
 ]
 

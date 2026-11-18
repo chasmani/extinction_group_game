@@ -97,6 +97,11 @@ class ParticipantConsent(Page):
 			player.participant.vars["switched"] = False
 
 		player.participant.wrong_answers = []
+		# A filled-in honeypot marks a bot. Anyone with wrong_answers is grouped alone (see game_group).
+		filled_in_honeypot = bool(player.field_maybe_none('further_details'))
+		if filled_in_honeypot:
+			player.participant.wrong_answers = ['honeypot']
+
 		player.participant.is_dropout = False
 
 		print(player.participant.condition)
