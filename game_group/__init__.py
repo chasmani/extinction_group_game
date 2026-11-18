@@ -157,7 +157,7 @@ def expected_value_strategy(n_risky, group_balance = 0, n_rounds=100, p_survive=
 
 def get_optimal_n_riskys(total_rounds_left, group_balance=0):
 
-	n_riskys = list(range(total_rounds_left))
+	n_riskys = list(range(total_rounds_left + 1))
 	expected_values = [expected_value_strategy(n_risky, group_balance=group_balance, n_rounds=total_rounds_left) for n_risky in n_riskys]
 
 	# Get max n_riskys

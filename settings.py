@@ -1,37 +1,53 @@
 from os import environ
 
+FULL_EXPERIMENT = ['consent', 'instructions', 'practice_group', 'practice_indy', 'game_group', 'game_indy', 'payment']
+
 SESSION_CONFIGS = [
     dict(
-        name='instuctions',
-        app_sequence=['instructions'],
+        name='full_experiment',
+        display_name='Full experiment, random assignment (for testing)',
+        app_sequence=FULL_EXPERIMENT,
+        num_demo_participants=10,
+    ),
+    dict(
+        name='demo_individual',
+        display_name='Individual',
+        app_sequence=FULL_EXPERIMENT,
+        num_demo_participants=1,
+        condition='indy',
+    ),
+    dict(
+        name='demo_group_no_info',
+        display_name='Group, independent choices, no strategy information',
+        app_sequence=FULL_EXPERIMENT,
         num_demo_participants=5,
+        condition='group',
+        information='none',
     ),
     dict(
-        name='game_group',
-        app_sequence=['game_group'],
-        num_demo_participants=10,
-    ),
-    dict(
-        name='practice_group',
-        app_sequence=['practice_group'],
-        num_demo_participants=10,
-    ),
-    dict(
-        name='payment',
-        app_sequence=['payment'],
+        name='demo_group_optimal',
+        display_name='Group, independent choices, with optimal strategy information',
+        app_sequence=FULL_EXPERIMENT,
         num_demo_participants=5,
+        condition='group',
+        information='optimal',
     ),
     dict(
-        name="full_experiment",
-        app_sequence=['consent', 'instructions', 'practice_group', 'practice_indy', 'game_group', 'game_indy', 'payment'],
-        num_demo_participants=10,
+        name='demo_voting_no_info',
+        display_name='Group, voting, no strategy information',
+        app_sequence=FULL_EXPERIMENT,
+        num_demo_participants=5,
+        condition='voting',
+        information='none',
     ),
-    dict(name="full_experiment_voting_with_info",
-        app_sequence=['consent', 'instructions', 'practice_group', 'practice_indy', 'game_group', 'game_indy', 'payment'],
-        num_demo_participants=10,
-        condition="voting",
-        information="optimal"
-    )
+    dict(
+        name='demo_voting_optimal',
+        display_name='Group, voting, with optimal strategy information',
+        app_sequence=FULL_EXPERIMENT,
+        num_demo_participants=5,
+        condition='voting',
+        information='optimal',
+    ),
 ]
 
 # if you set a property in SESSION_CONFIG_DEFAULTS, it will be inherited by all configs
