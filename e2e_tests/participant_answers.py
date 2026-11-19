@@ -51,7 +51,7 @@ def answer_voting_quiz(page_html):
 
 
 def answer_optimal_strategy_quiz(page_html):
-    return {"optimal_comprehension_group": "8"}
+    return {"optimal_comprehension_group": "8", "optimal_comprehension_indy": "1 to 2"}
 
 
 def choose_lottery_in_group(page_html):

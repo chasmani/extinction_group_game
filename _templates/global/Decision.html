@@ -1,6 +1,10 @@
 {% extends "global/Page.html" %}
 {% load otree %}
 
+{{ block title }}
+  Decision
+{{ endblock }}
+
 {{ block content }}
 
 <div>
@@ -16,8 +20,12 @@
                 {% if player.round_number > 1 and player.participant.game_extinct %}
                 <div class="col-md-6">
                         <div class="alert alert-danger" role="alert">
-                            <p><strong>You are extinct!</strong> You will still need to continue playing the remaining rounds to get the base payment.
-                            However, you will not earn any bonus.</p>
+                            {% if C.NAME_IN_URL == "practice_group" %}
+                                <p><strong>You are extinct!</strong> This is just a practice game. If this happens in the real game, you will not earn any bonus, and you will still need to continue playing the remaining rounds to get the base payment.</p>
+                            {% else %}
+                                <p><strong>You are extinct!</strong> You will still need to continue playing the remaining rounds to get the base payment.
+                                However, you will not earn any bonus.</p>
+                            {% endif %}
                         </div>
                     </div>
                 {% else %}
@@ -72,6 +80,11 @@
                 <div class="col-md-4 optimal-info">
             
                     <p class="margin-h2"><h2>{{ optimal_n_risky }}</h2> total risky lotteries for the group over the rest of the game.</p>
+                </div>
+                <div class="col-md-4 optimal-info">
+
+                <p class="margin-h2"><h2>{{ optimal_n_risky_per_player }}</h2> risky lotteries per player over the rest of the game.</p>
+
                 </div>
                 </div>
                 </div>

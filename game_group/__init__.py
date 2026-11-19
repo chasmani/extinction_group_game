@@ -73,6 +73,18 @@ class Player(BasePlayer):
 		initial=''
 		)
 
+	optimal_comprehension_indy = models.StringField(
+		label="If each player wants the group to play the optimal number of risky lotteries, how many risky lotteries should each player play on average?",
+		choices=[
+			["5 to 6", "Each player plays 5 to 6 risky lotteries over the entire game"],
+			["1 to 2", "Each player plays 1 to 2 risky lotteries over the entire game"],
+			["0 to 1", "Each player plays 0 to 1 risky lotteries over the entire game"],
+			["0", "Each player plays 0 risky lotteries over the entire game"],
+		],
+		widget=widgets.RadioSelect,
+		initial=''
+		)
+
 	lottery_result = models.IntegerField()
 	game_current_bonus = models.IntegerField()
 	game_extinct = models.BooleanField()
@@ -82,7 +94,12 @@ def optimal_comprehension_group_error_message(player, value):
 	if value != '8':
 		player.participant.wrong_answers.append('optimal_comprehension_group')
 		return 'That is not correct. Please try again.'
-	
+
+def optimal_comprehension_indy_error_message(player, value):
+	if value != '1 to 2':
+		player.participant.wrong_answers.append('optimal_comprehension_indy')
+		return 'That is not correct. Please try again.'
+
 def group_by_arrival_time_method(self, waiting_players):
 
 	for player in waiting_players:
@@ -191,7 +208,7 @@ class OptimalChoices(Page):
 	timeout_seconds = C.TIMEOUT_CHOICE * 2
 
 	form_model = 'player'
-	form_fields = ['optimal_comprehension_group']
+	form_fields = ['optimal_comprehension_group', 'optimal_comprehension_indy']
 
 	def is_displayed(player):
 		
